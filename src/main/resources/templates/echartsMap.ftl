@@ -120,7 +120,7 @@ document.getElementById('mapDiv').onmousewheel = function (e){
     zrEvent.stop(event);
 };
 
-var curCountryData;
+var curCountryData;//= [];
 myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     var len = mapType.length;
     var mt = mapType[curIndx % len];
@@ -135,10 +135,19 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                         curIndx = len;
                     }
                 }
+                console.log("地图切换前:");
+                console.log(option.series[0].mapType);
                 //数据切换
                 curCountryData = option.series[option.series.length-1].markPoint.data;//保存数据供切换回全国地图使用
-                console.log(option.series);
                 option.series[option.series.length-1].markPoint.data = [];
+                
+                /*
+                for(var i=0;i<option.series.length;i++){
+                	curCountryData[i]=option.series[i].markPoint.data;
+                	option.series[i].markPoint.data = [];
+                	option.series[i].geoCoord = [];
+                }*/                
+                
                 //option.series[option.series.length-1].geoCoord = [];
                 break;
             }
@@ -148,6 +157,11 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     else {
         curIndx = 0;
         mt = 'china';
+        /*
+        for(var i=0;i<option.series.length;i++){
+            	option.series[i].markPoint.data = curCountryData[i];   
+            	option.series[i].geoCoord = l_geoCoord;         	
+        }*/
         option.series[option.series.length-1].markPoint.data = curCountryData;
         //option.series[option.series.length-1].geoCoord = l_geoCoord;
         //option.tooltip.formatter = '滚轮切换或点击进入该省<br/>{b}';
@@ -156,6 +170,9 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     for (var i=0;i<option.series.length;i++){
         option.series[i].mapType = mt;
     }
+    
+    console.log("地图切换后:");
+    console.log(option.series[0].mapType);
     //option.title.subtext = mt + ' （滚轮或点击切换）';
     
     myChart.setOption(option, true);
@@ -258,7 +275,8 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
 	                }
 	            },
 	           
-	            data:${map['data']},
+	            data:${map['data']}
+	            /*,
 	            markPoint : {
                     itemStyle : {
                         normal:{
@@ -268,7 +286,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                     data : [
                     ]
                 },
-                geoCoord: {}
+                geoCoord: {}*/
         },
         </#list>
         {name: '',
@@ -299,7 +317,9 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
           }
     ]
 };
-    myChart.setOption(option);
+    
     
     ${markPoint};
+    
+    myChart.setOption(option);
 </script>

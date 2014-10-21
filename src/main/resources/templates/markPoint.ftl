@@ -124,19 +124,24 @@ function refreshMarkPoint(param){
         
         //alert(debug);
         //var geoCoord = option.series[0].geoCoord;//此行用模板的话可以不用
+        /*
         for(var i=0;i<option.series.length;i++){
              //console.log( option.series[i]["name"]);
              option.series[i].markPoint.data=[];
              option.series[i].geoCoord = [];
-        }
+        }*/
     
         console.log(datas);
         //var dataold = option.series[0].markPoint.data;
         legendIndex=option.series.length-1;
         option.series[legendIndex].markPoint.data=datas; //地图显示数据赋值
         option.series[legendIndex].geoCoord = l_geoCoord;//地图坐标赋值
-        //option.series[0].markPoint.data.push('win');
-        myChart.setOption(option, true);//刷新地图
+       
+        if(!firstTimeloadingPageFlag){
+        	//进入页面同时调用myChart.setOption两次，可能导致地图的数据不一致，最终会导致地图下转出错，
+        	//所以第一次进入不执行以下语句
+        	myChart.setOption(option, true);//刷新地图
+        }
 };
 
 //将markpoint坐标加入json数组供页面显示用
@@ -153,7 +158,9 @@ function addToData(newLocationDatas,newDatas){
 }
 
 //页面加载时自动标注数字
+var firstTimeloadingPageFlag = true;//是否第一次进入页面
 refreshMarkPoint();
+firstTimeloadingPageFlag = false;
 </#if>
 
 //////////////////////////////////////////////////////序列选择后刷新地图上的数字End
