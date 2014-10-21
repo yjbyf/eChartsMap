@@ -292,13 +292,8 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                         normal:{
                             color:'${markPointColor}'
                         }
-                    },
-                    <#if markPointShowOrNot='true'>
-                    data : ${dataVar[0]['data']}
-                    </#if>
-                    <#if markPointShowOrNot='false'>
-                    data : []
-                    </#if>
+                    },                    
+                    data : [] 
                 },
                 geoCoord: l_geoCoord
           }

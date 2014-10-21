@@ -2,7 +2,9 @@
 //要先配置是否显示数字
 //console.log(${markPointShowOrNot});
 <#if markPointShowOrNot='true'>
-myChart.on(echarts.config.EVENT.LEGEND_SELECTED, function (param){
+myChart.on(echarts.config.EVENT.LEGEND_SELECTED,refreshMarkPoint);
+
+function refreshMarkPoint(param){
         var curSelected;
         
         if(param==null){
@@ -76,6 +78,7 @@ myChart.on(echarts.config.EVENT.LEGEND_SELECTED, function (param){
                         //判断数据的地区是否有坐标，无坐标则不显示
                         /*
                         for(var v_location in l_geoCoord){
+                        	console.log(v_location);
                         	if(value(v_location) == newLocationDatas["name"]){
                         		newDatas.push(newLocationDatas);//加入数组
                         	}
@@ -130,20 +133,27 @@ myChart.on(echarts.config.EVENT.LEGEND_SELECTED, function (param){
         console.log(datas);
         //var dataold = option.series[0].markPoint.data;
         legendIndex=option.series.length-1;
-        option.series[legendIndex].markPoint.data=datas;
-        option.series[legendIndex].geoCoord = l_geoCoord;
+        option.series[legendIndex].markPoint.data=datas; //地图显示数据赋值
+        option.series[legendIndex].geoCoord = l_geoCoord;//地图坐标赋值
         //option.series[0].markPoint.data.push('win');
-        myChart.setOption(option, true);
-        
-});
+        myChart.setOption(option, true);//刷新地图
+};
 
+//将markpoint坐标加入json数组供页面显示用
+//newLocationDatas json对象
+//newDatas json数组存放json对象
 function addToData(newLocationDatas,newDatas){
-	for(var v_location in l_geoCoord){
-    	if(value(v_location) == newLocationDatas["name"]){
+	for(var v_location in l_geoCoord){//判断是否有坐标，无坐标则不显示markpoint
+		//console.log(v_location);
+		if((v_location) == newLocationDatas["name"]){
+    	//if(value(v_location) == newLocationDatas["name"]){
     		newDatas.push(newLocationDatas);//加入数组
     	}
     }
 }
+
+//页面加载时自动标注数字
+refreshMarkPoint();
 </#if>
 
 //////////////////////////////////////////////////////序列选择后刷新地图上的数字End
