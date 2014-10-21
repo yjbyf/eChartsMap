@@ -1,0 +1,281 @@
+[
+	{
+		title:'基本配置',
+		properties:[
+			{
+				name:'id',
+				label:'Id',
+				type:'hidden'
+			},
+			{
+		        name : 'label',
+		        label : 'label',
+		        type : 'textfield',
+		        required : 'True',
+		        value : 'Map'
+		    },
+			{
+				name:'customId',
+				label:'自定义id',
+				type:'textfield',
+				regex_validation:'^[a-zA-Z0-9_]+$',
+				validation_message:'非法输入'
+			},
+			{
+				name:'devMode',
+				label:'是否开发模式',
+				type:'selectbox',
+				value:'no',
+				options : [{
+		        	value : 'no',
+		            label : 'no'
+		        },
+		        {
+		            value : 'yes',
+		            label : 'yes'
+		        }]
+			}
+		]
+	},
+	{
+		title:'页面配置',
+		properties:[
+			{
+		        name : 'mapLabel',
+		        label : '地图标题',
+		        type : 'textfield',
+		        required : 'True',
+		        value : 'Map'
+		    },
+		    {
+		        name : 'mapSubLabel',
+		        label : '地图副标题',
+		        type : 'textfield',
+		        required : 'False',
+		        value : 'Map'
+		    },
+			{
+				name:'height',
+				label:'高度(px)',
+				type:'textfield',
+				required:'True',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+			},
+			{
+				name:'weight',
+				label:'宽度(px)',
+				type:'textfield',
+				required:'True',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+			},
+			{
+		        name : 'backGroundColor',
+		        label : '地图底色',
+		        type:'textfield',
+				required:'Flase',
+				value : '#000000',
+				regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]|^$',
+				validation_message:'非法输入'
+		    },
+		    {
+		        name : 'fontColor',
+		        label : '字体颜色',
+		        type:'textfield',
+				required:'Flase',
+				value : '#ffffff',
+				regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]$',
+				validation_message:'非法输入'
+		    }
+		]
+	},
+	{
+		title:'值域配置',
+		properties:[
+			{
+		        name : 'splitNumber',
+		        label : '值域段数(0为不分段)',
+		        type:'textfield',
+				required:'True',
+				value : '0',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+		    },
+		    {
+		        name : 'dataRangeMax',
+		        label : '最大值',
+		        type:'textfield',
+				required:'True',
+				value : '0',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+		    },
+		    {
+		        name : 'maxValueColor',
+		        label : '最大值的颜色标识',
+		        type:'textfield',
+				required:'Flase',
+				value : '#FF0000',
+				regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]$',
+				validation_message:'非法输入'
+		    },
+		    {
+		        name : 'dataRangeMin',
+		        label : '最小值',
+		        type:'textfield',
+				required:'True',
+				value : '0',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+		    },
+		    {
+		        name : 'minValueColor',
+		        label : '最小值的颜色标识',
+		        type:'textfield',
+				required:'Flase',
+				value : '#FFFF00',
+				regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]$',
+				validation_message:'非法输入'
+		    }
+		]
+	},
+	{
+		title:'主题配置',
+		properties:[
+			{
+		        name : 'theme',
+		        label : '主题',
+		        type : 'selectbox',
+		        required : 'True',
+		        value : 'default',
+		        options : [{
+		        	value : 'infographic',
+		            label : 'infographic'
+		        },
+		        {
+		            value : 'shine',
+		            label : 'shine'
+		        },
+		        {
+		            value : 'dark',
+		            label : 'dark'
+		        },
+		        {
+		            value : 'blue',
+		            label : 'blue'
+		        },
+		        {
+		            value : 'green',
+		            label : 'green'
+		        },
+		        {
+		            value : 'red',
+		            label : 'red'
+		        },
+		        {
+		            value : 'gray',
+		            label : 'gray'
+		        },
+		        {
+		            value : 'default',
+		            label : 'default'
+		        }]
+		    }
+		]
+	},
+	{
+		title:'数据展示',
+		properties:[
+		    {
+		        name : 'tooltipShowDetail',
+		        label : '鼠标移动到区域是否显示数字',
+		        type : 'selectbox',
+		        required : 'true',
+		        value : 'true',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+		    {
+		        name : 'markPointShowOrNot',
+		        label : '地图是否显示数字',
+		        type : 'selectbox',
+		        required : 'true',
+		        value : 'true',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+		    {
+		        name : 'markPointColor',
+		        label : '地图数字底色颜色',
+		        type:'textfield',
+				required:'Flase',
+				value : '#000000',
+				regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]$',
+				validation_message:'非法输入'
+		    },
+		    {
+		        name : 'MultiShowSeries',
+		        label : '序列是否可以多选',
+		        type : 'selectbox',
+		        required : 'true',
+		        value : 'true',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    }
+		]
+	},
+	{
+		title:'数据源配置',
+		properties:[
+		    {
+		        name : 'seriesColumnName',
+		        label : '序列列名',
+		        type : 'textfield',
+		        required : 'True',
+		        value : 'series'
+		    },
+		    {
+		        name : 'cityColumnName',
+		        label : '城市列名',
+		        type : 'textfield',
+		        required : 'True',
+		        value : 'city'
+		    },
+		    {
+		        name : 'quantityColumnName',
+		        label : '数量列名',
+		        type : 'textfield',
+		        required : 'True',
+		        value : 'quantity'
+		    },
+			{
+				name:'sql',
+				label:'查询sql',
+				type : 'textarea',
+		        cols : '60',
+		        rows : '15',
+				required:'True',
+				value : 'select city,quantity from jwdb.test where  series="1";'
+			}
+		]
+	}	
+]
