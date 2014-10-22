@@ -28,3 +28,14 @@
 		序列		大区		数据
 	 java+sql+模板实现
 	    	各个大区sql union并且排序即可
+	    	
+-------------------------------------------------------
+测试配置
+西北区 新疆,内蒙古
+西南区 西藏,四川
+
+product
+quantity
+location
+select product ,sum(price) quantity from oe_order_all 
+group by product;	    	
