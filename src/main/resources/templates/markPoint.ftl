@@ -5,6 +5,7 @@
 myChart.on(echarts.config.EVENT.LEGEND_SELECTED,refreshMarkPoint);
 
 function refreshMarkPoint(param){
+		
         var curSelected;
         
         if(param==null){
@@ -13,13 +14,17 @@ function refreshMarkPoint(param){
             curSelected= option.legend.selected;
         }else{
             curSelected = param.selected;
+            g_series_seleted = param;
         }
-        
+        refreshMarkPointCore(curSelected);
+}
+
+function refreshMarkPointCore(curSelected){       
          
         //alert(option.legend.data.length);
         //得到选择的序列清单
         var debug="";
-        var legendIndex = 0 ;//用那个序列显示markPoint，多选的话默认最后一个选择序列
+        var legendIndex = 0 ;//用那个序列显示markPoint:最后一个选择序列
         var selectedSeriesArray  = new Array();
         var selectedSeriesStep = 0;
         for(var i=0;i<option.legend.data.length;i++)
@@ -38,7 +43,7 @@ function refreshMarkPoint(param){
         //alert(datas.length);
         for(var i=0;i<selectedSeriesArray.length;i++){ //选择序列遍历
             var selectedSeriesName =  selectedSeriesArray[i];
-            console.log(selectedSeriesName);
+            //console.log("选择序列:"+selectedSeriesName);
             
             for(var j=0;j<option.series.length;j++){//现有序列遍历
                 //找到相等的进行计算放入新的数组中
@@ -46,7 +51,7 @@ function refreshMarkPoint(param){
                 var curSeriesName = curSeries.name;
                 if(selectedSeriesName == curSeriesName ){//如冰箱==冰箱
                     var newDatas = [];//存放新结果的数组
-                    console.log("第"+i+"个产品"+selectedSeriesName+"找到序列:"+curSeriesName+" 长度"+curSeries.data.length);
+                    //console.log("第"+i+"个产品"+selectedSeriesName+"找到序列:"+curSeriesName+" 长度"+curSeries.data.length);
 
                     for(var k=0;k<curSeries.data.length;k++){//如冰箱序列(地名,值)
                         //得到序列下的一维数组（地名，值）数据
@@ -54,21 +59,21 @@ function refreshMarkPoint(param){
                          
                         var curSeriesData_CityName = curSeriesData["name"];
                         var curSeriesData_CityValue = curSeriesData["value"]
-                        console.log("第"+i+"个产品"+selectedSeriesName+"找到序列:"+curSeriesName+" 长度"+curSeries.data.length+"--"+curSeriesData_CityName+":"+curSeriesData_CityValue);
+                        //console.log("第"+i+"个产品"+selectedSeriesName+"找到序列:"+curSeriesName+" 长度"+curSeries.data.length+"--"+curSeriesData_CityName+":"+curSeriesData_CityValue);
                         var l;
                         var newLocationDatas = new Object() ;
-                        console.log("datas.length"+datas.length);
+                        //console.log("datas.length"+datas.length);
                         newLocationDatas["name"] = curSeriesData_CityName;
                         var found = false;
                         for(l=0;l<datas.length;l++){//遍历datas，查找是否有相同城市的数据，有则累计，无则新增
                             var cityUnit = datas[l];
                             var cityName = cityUnit["name"];
-                            console.log("-----和---"+cityName+"-----比较");
+                            //console.log("-----和---"+cityName+"-----比较");
                             if(cityName == curSeriesData_CityName ){//有则和老值相加
                                 //console.log("已有数据"+cityName+"值"+curSeriesData_CityValue);
                                 newLocationDatas["value"]=cityUnit["value"]+curSeriesData_CityValue;
                                 found=true;
-                                console.log("已有数据"+cityName+"值"+curSeriesData_CityValue);
+                                //console.log("已有数据"+cityName+"值"+curSeriesData_CityValue);
                             }
                         }
                         if(!found){
@@ -78,7 +83,7 @@ function refreshMarkPoint(param){
                         //判断数据的地区是否有坐标，无坐标则不显示
                         /*
                         for(var v_location in l_geoCoord){
-                        	console.log(v_location);
+                        	//console.log(v_location);
                         	if(value(v_location) == newLocationDatas["name"]){
                         		newDatas.push(newLocationDatas);//加入数组
                         	}
@@ -131,36 +136,44 @@ function refreshMarkPoint(param){
              option.series[i].geoCoord = [];
         }*/
     
-        console.log(datas);
+        //console.log(datas);
         //var dataold = option.series[0].markPoint.data;
         legendIndex=option.series.length-1;
         option.series[legendIndex].markPoint.data=datas; //地图显示数据赋值
         option.series[legendIndex].geoCoord = l_geoCoord;//地图坐标赋值
        
-        if(!firstTimeloadingPageFlag){
+        //if(!firstTimeloadingPageFlag){
         	//进入页面同时调用myChart.setOption两次，可能导致地图的数据不一致，最终会导致地图下转出错，
         	//所以第一次进入不执行以下语句
-        	myChart.setOption(option, true);//刷新地图
-        }
+        	
+        //}
+        myChart.setOption(option, true);//刷新地图
 };
 
 //将markpoint坐标加入json数组供页面显示用
 //newLocationDatas json对象
 //newDatas json数组存放json对象
+//有bug，如果是地图模式在二级地图上，此方法也会加入一级省市的数据并在地图上显示
+//TODO需要根据地图类型及地图目前的地区名，来加载地区内的geoCoord，并根据此geoCoord过滤需要加载的markpoint
 function addToData(newLocationDatas,newDatas){
-	for(var v_location in l_geoCoord){//判断是否有坐标，无坐标则不显示markpoint
-		//console.log(v_location);
+	//console.log(newLocationDatas["name"]);
+	if(option.series[0]["mapType"]!='china'){
+			//目前无二级县市坐标信息，所以不是china的话自动返回
+			return false;
+	}
+	for(var v_location in l_geoCoord){//判断是否有坐标，无坐标则不显示markpoint		
 		if((v_location) == newLocationDatas["name"]){
     	//if(value(v_location) == newLocationDatas["name"]){
+    		//console.log(newLocationDatas["name"]+"====="+v_location);
     		newDatas.push(newLocationDatas);//加入数组
     	}
     }
 }
 
 //页面加载时自动标注数字
-var firstTimeloadingPageFlag = true;//是否第一次进入页面
-refreshMarkPoint();
-firstTimeloadingPageFlag = false;
+//var firstTimeloadingPageFlag = true;//是否第一次进入页面
+refreshMarkPoint();//页面加载时，初始化显示
+//firstTimeloadingPageFlag = false;
 </#if>
 
 //////////////////////////////////////////////////////序列选择后刷新地图上的数字End

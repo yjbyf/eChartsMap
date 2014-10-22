@@ -12,6 +12,7 @@
 	${debug}
 -->
 <script>
+	var g_series_seleted;
     var l_geoCoord = {
                     '北京':[116.39564503788,39.92998577808],
                     '天津': [117.4219,39.4189],
@@ -135,8 +136,8 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                         curIndx = len;
                     }
                 }
-                console.log("地图切换前:");
-                console.log(option.series[0].mapType);
+                //console.log("地图切换前:");
+                //console.log(option.series[0].mapType);
                 //数据切换
                 curCountryData = option.series[option.series.length-1].markPoint.data;//保存数据供切换回全国地图使用
                 option.series[option.series.length-1].markPoint.data = [];
@@ -171,11 +172,22 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         option.series[i].mapType = mt;
     }
     
-    console.log("地图切换后:");
-    console.log(option.series[0].mapType);
+    //console.log("地图切换后:");
+    //console.log(option.series[0].mapType);
     //option.title.subtext = mt + ' （滚轮或点击切换）';
+    //console.log(option.legend.getSelectedMap());
     
-    myChart.setOption(option, true);
+    //地图切换后，切换前选择的序列和切换后选择的序列可能因为客户操作变更了，但是markpoint未做刷新
+    //所以为了保持一致，切换后重新计算markpoint
+    //需要切换前后的序列数据要保持刷新一致，则定义个全局变量数组g_series_seleted，存放用户选择的序列，然后调用在if判断之间加入refreshMarkPoint(g_series_seleted)生成markpoint，
+    //并且修改refreshMarkPoint的逻辑，当用户选择变更时，对全局变量数组进行写操作，保持数据一致
+    //写操作：g_series_seleted=param
+    <#if markPointShowOrNot='true'>
+    	refreshMarkPoint(g_series_seleted);//其中已带有myChart.setOption(option, true);操作，所以用if判断
+    </#if>	
+    <#if markPointShowOrNot='false'>
+    	myChart.setOption(option, true);//true后，原有markpoint都失效
+    </#if>
 });
 ///////////////////////////////////////////////////////地图缩放end
    
@@ -322,4 +334,5 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     ${markPoint};
     
     myChart.setOption(option);
+    myChart.restore();
 </script>
