@@ -277,5 +277,70 @@
 				value : 'select city,quantity from jwdb.test where  series="1";'
 			}
 		]
+	},
+	{
+		title:'大区配置',
+		properties:[
+			{
+		        name : 'areaShow',
+		        label : '是否大区视图展示数据(大区优于省市显示)',
+		        type : 'selectbox',
+		        required : 'true',
+		        value : 'false',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+			{
+		        name : 'areaDefine',
+		        label : '区域定义',
+		        type : 'gridCombine',
+		        columns : [{
+		            key : 'areaName',
+		            label : '大区',
+		            value : '东北'
+		        },
+		        {
+		            key : 'areaLocations',
+		            label : '省市(以英文逗号分隔)',
+		            value :'辽宁,吉林,黑龙江'
+		        }]
+		    },
+		    {
+		        name : 'areaSeriesColumnName',
+		        label : '序列列名',
+		        type : 'textfield',
+		        required : 'True',
+		        value : 'series'
+		    },
+		    {
+		        name : 'areaQuantityColumnName',
+		        label : '数量列名',
+		        type : 'textfield',
+		        required : 'True',
+		        value : 'quantity'
+		    },
+		    {
+		        name : 'areaCityColumnName',
+		        label : '地区列名',
+		        type : 'textfield',
+		        required : 'True',
+		        value : 'location'
+		    },
+		    {
+				name:'areaSql',
+				label:'查询sql',
+				type : 'textarea',
+		        cols : '60',
+		        rows : '15',
+				required:'True',
+				value : 'select sum(quantity) as quantity,product as series from tableName group by product;'
+			}			
+		]
 	}	
 ]

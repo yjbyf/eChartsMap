@@ -12,9 +12,16 @@ import org.joget.plugin.base.PluginManager;
 
 import com.joget.valuprosys.echartsMap.database.DaoUtils;
 import com.joget.valuprosys.echartsMap.utils.MapDataFormat;
+import com.joget.valuprosys.echartsMap.utils.RegionUtils;
 
 public class EchartsMap extends UserviewMenu {
 
+	private static final String FALSE = "false";
+	private static final String AREA_SQL = "areaSql";
+	private static final String AREA_CITY_COLUMN_NAME = "areaCityColumnName";
+	private static final String AREA_LOCATIONS = "areaLocations";
+	private static final String AREA_NAME = "areaName";
+	private static final String AREA_SHOW = "areaShow";
 	private static final String MARK_POINT_COLOR = "markPointColor";
 	private static final String MARK_POINT_SHOW_OR_NOT = "markPointShowOrNot";
 	private static final String TOOLTIP_SHOW_DETAIL = "tooltipShowDetail";
@@ -23,6 +30,8 @@ public class EchartsMap extends UserviewMenu {
 	private static final String SERIES_COLUMN_NAME = "seriesColumnName";
 	private static final String QUANTITY_COLUMN_NAME = "quantityColumnName";
 	private static final String CITY_COLUMN_NAME = "cityColumnName";
+	
+	
 	//private final String name = "EchartsMap";
 	//private final String version = "1.0";
 
@@ -33,7 +42,8 @@ public class EchartsMap extends UserviewMenu {
 	private static final String TEMPLATES_ECHARTS_MAP_FTL = "/templates/echartsMap.ftl";
 	private static final String ICON = "/plugin/org.joget.apps.userview.lib.HtmlPage/images/grid_icon.gif";
 	private static final List<String> PARAM = Arrays.asList("devMode","width", "height",BACK_GROUND_COLOR,FONT_COLOR, "mapLabel","mapSubLabel","theme","splitNumber","maxValueColor"
-				,"minValueColor","dataRangeMin","dataRangeMax",TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL);
+				,"minValueColor","dataRangeMin","dataRangeMax",TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
+				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,AREA_SQL,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_CITY_COLUMN_NAME);
 	
 	private static final String TEMPLATE_PATH = TEMPLATES_ECHARTS_MAP_FTL;
 	private static final String THEME_PATH = "/templates/themes.ftl";
@@ -88,10 +98,20 @@ public class EchartsMap extends UserviewMenu {
 		//String htmlDataStr = DaoUtils.convertToStandardMapFormat(result, getPropertyString(SERIES_COLUMN_NAME),getPropertyString(CITY_COLUMN_NAME), getPropertyString(QUANTITY_COLUMN_NAME));
 		//param.put("data",htmlDataStr);
 		
+		//大区相关内容
+		String areaDataSql= RegionUtils.getQuerySql(getPropertyString(AREA_SQL),getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_CITY_COLUMN_NAME));
+		String areaData = RegionUtils.queryRegionData(areaDataSql);
+		param.put("areaDataSql", areaDataSql);
+		param.put("areaData", areaData);
 		//存放data块内容
 		List<Map<String, String>> dataList = MapDataFormat.convertToStandardMapFormat(result, getPropertyString(SERIES_COLUMN_NAME).trim(),getPropertyString(CITY_COLUMN_NAME).trim(), getPropertyString(QUANTITY_COLUMN_NAME).trim());
 		
-		param.put("dataVar", dataList);
+		if(getPropertyString(AREA_SHOW).equals(FALSE)){
+			param.put("dataVar", dataList);
+		}else {
+			//用大区数据替换地区数据进行显示
+			param.put("dataVar", null);
+		}
 		//存放序列名称数组
 		List<String> seriesNameList = MapDataFormat.getSeriesNamesWithQuato(getPropertyString(SERIES_COLUMN_NAME).trim(), result);
 		param.put("allSeriesLabels", seriesNameList.toString());

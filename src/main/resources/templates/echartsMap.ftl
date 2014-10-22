@@ -10,6 +10,14 @@
 	${result}
 	-------------------
 	${debug}
+	<#if areaShow = "true">
+		大区配置如下:		
+		${areaName}
+		${areaLocations}
+		${areaDataSql}
+		${areaData}
+	</#if>
+	
 -->
 <script>
 	var g_series_seleted;
@@ -262,6 +270,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         }
     },
    series : [
+   	<#if dataVar ??> 	
 		<#list dataVar as map>
         {
 	            name: '${map['seriesLabel']}',
@@ -302,6 +311,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                 geoCoord: {}*/
         },
         </#list>
+     </#if>   
         {name: '',
                 type: 'map',
                 mapType: 'china',

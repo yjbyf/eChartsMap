@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////序列选择后刷新地图上的数字Start
 //要先配置是否显示数字
 //console.log(${markPointShowOrNot});
-<#if markPointShowOrNot='true'>
+<#if markPointShowOrNot='true' && areaShow='false'>
 myChart.on(echarts.config.EVENT.LEGEND_SELECTED,refreshMarkPoint);
 
 function refreshMarkPoint(param){
