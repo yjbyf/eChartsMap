@@ -244,6 +244,21 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         data: ${allSeriesLabels}
     },
     </#if>
+    hiddenLegend: {//用于 showLegend=false ,legend不显示的情况
+        orient: 'vertical',
+        x:'left',
+        <#if MultiShowSeries='false'>
+        selectedMode : 'single',        
+        </#if>
+        <#if allSeriesLabelsList?size !=0 >
+        selected : {0:false
+        	<#list allSeriesLabelsList as allSeriesLabel>
+        		,${allSeriesLabel}:true
+        	</#list>
+        },	
+        </#if>
+        data: ${allSeriesLabels}
+    },
     dataRange:dataRangeStyle[1],
     /*
     dataRange: {

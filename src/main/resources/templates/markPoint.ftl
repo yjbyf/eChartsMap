@@ -3,36 +3,42 @@
 //console.log(${markPointShowOrNot});
 <#if markPointShowOrNot='true' && areaShow='false' >
 myChart.on(echarts.config.EVENT.LEGEND_SELECTED,refreshMarkPoint);
-
+var curLegend; //用于标注markpoint用
 function refreshMarkPoint(param){
-		<#if showLegend = 'true'>
-		//showLegend设置成不显示的话option.legend拿不到，所以屏蔽以下功能
+		var curOption;		
         var curSelected;
-        
+        curOption = option;
         if(param==null){
             //页面初始化显示逻辑
             //p_option = myChart.option;
-            curSelected= option.legend.selected;
+            <#if showLegend = 'true'>
+            	curSelected= curOption.legend.selected; //显示序列，则正常取值
+            	curLegend = curOption.legend;
+            </#if>
+            <#if showLegend = 'false'>
+            	curSelected= curOption.hiddenLegend.selected;//不显示，则从隐藏值取，默认全选
+            	curLegend = curOption.hiddenLegend;
+            </#if>
         }else{
             curSelected = param.selected;
             g_series_seleted = param;
         }
-        refreshMarkPointCore(curSelected);
-        </#if>
-        myChart.setOption(option, true);//刷新地图
+        refreshMarkPointCore(curSelected,curOption);
+        
+        myChart.setOption(curOption, true);//刷新地图
 }
 
-function refreshMarkPointCore(curSelected){       
+function refreshMarkPointCore(curSelected,curOption){       
          
-        //alert(option.legend.data.length);
+        //alert(curLegend.data.length);
         //得到选择的序列清单
         var debug="";
         var legendIndex = 0 ;//用那个序列显示markPoint:最后一个选择序列
         var selectedSeriesArray  = new Array();
         var selectedSeriesStep = 0;
-        for(var i=0;i<option.legend.data.length;i++)
+        for(var i=0;i<curLegend.data.length;i++)
         {            
-            var label = option.legend.data[i];
+            var label = curLegend.data[i];
             if(curSelected[label]){
                 legendIndex =  i;
                 debug = debug + label;
@@ -48,9 +54,9 @@ function refreshMarkPointCore(curSelected){
             var selectedSeriesName =  selectedSeriesArray[i];
             //console.log("选择序列:"+selectedSeriesName);
             
-            for(var j=0;j<option.series.length;j++){//现有序列遍历
+            for(var j=0;j<curOption.series.length;j++){//现有序列遍历
                 //找到相等的进行计算放入新的数组中
-                var curSeries = option.series[j];
+                var curSeries = curOption.series[j];
                 var curSeriesName = curSeries.name;
                 if(selectedSeriesName == curSeriesName ){//如冰箱==冰箱
                     var newDatas = [];//存放新结果的数组
@@ -91,7 +97,7 @@ function refreshMarkPointCore(curSelected){
                         		newDatas.push(newLocationDatas);//加入数组
                         	}
                         }*/
-                        addToData(newLocationDatas,newDatas);
+                        addToData(newLocationDatas,newDatas,curOption);
                       
                         
                         /*
@@ -119,7 +125,7 @@ function refreshMarkPointCore(curSelected){
                         //未找到
                         if(!found){
                             //newDatas.push(datas[m]);
-                            addToData(datas[m],newDatas);
+                            addToData(datas[m],newDatas,curOption);
                         }
                     }//end m
                     
@@ -131,19 +137,19 @@ function refreshMarkPointCore(curSelected){
         }//end for i
         
         //alert(debug);
-        //var geoCoord = option.series[0].geoCoord;//此行用模板的话可以不用
+        //var geoCoord = curOption.series[0].geoCoord;//此行用模板的话可以不用
         /*
-        for(var i=0;i<option.series.length;i++){
-             //console.log( option.series[i]["name"]);
-             option.series[i].markPoint.data=[];
-             option.series[i].geoCoord = [];
+        for(var i=0;i<curOption.series.length;i++){
+             //console.log( curOption.series[i]["name"]);
+             curOption.series[i].markPoint.data=[];
+             curOption.series[i].geoCoord = [];
         }*/
     
         //console.log(datas);
-        //var dataold = option.series[0].markPoint.data;
-        legendIndex=option.series.length-1;
-        option.series[legendIndex].markPoint.data=datas; //地图显示数据赋值
-        option.series[legendIndex].geoCoord = l_geoCoord;//地图坐标赋值
+        //var dataold = curOption.series[0].markPoint.data;
+        legendIndex=curOption.series.length-1;
+        curOption.series[legendIndex].markPoint.data=datas; //地图显示数据赋值
+        curOption.series[legendIndex].geoCoord = l_geoCoord;//地图坐标赋值
        
         //if(!firstTimeloadingPageFlag){
         	//进入页面同时调用myChart.setOption两次，可能导致地图的数据不一致，最终会导致地图下转出错，
@@ -158,9 +164,9 @@ function refreshMarkPointCore(curSelected){
 //newDatas json数组存放json对象
 //有bug，如果是地图模式在二级地图上，此方法也会加入一级省市的数据并在地图上显示
 //TODO需要根据地图类型及地图目前的地区名，来加载地区内的geoCoord，并根据此geoCoord过滤需要加载的markpoint
-function addToData(newLocationDatas,newDatas){
+function addToData(newLocationDatas,newDatas,curOption){
 	//console.log(newLocationDatas["name"]);
-	if(option.series[0]["mapType"]!='china'){
+	if(curOption.series[0]["mapType"]!='china'){
 			//目前无二级县市坐标信息，所以不是china的话自动返回
 			return false;
 	}
