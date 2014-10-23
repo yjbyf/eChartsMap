@@ -1,11 +1,12 @@
 //////////////////////////////////////////////////////序列选择后刷新地图上的数字Start
 //要先配置是否显示数字
 //console.log(${markPointShowOrNot});
-<#if markPointShowOrNot='true' && areaShow='false'>
+<#if markPointShowOrNot='true' && areaShow='false' >
 myChart.on(echarts.config.EVENT.LEGEND_SELECTED,refreshMarkPoint);
 
 function refreshMarkPoint(param){
-		
+		<#if showLegend = 'true'>
+		//showLegend设置成不显示的话option.legend拿不到，所以屏蔽以下功能
         var curSelected;
         
         if(param==null){
@@ -17,6 +18,8 @@ function refreshMarkPoint(param){
             g_series_seleted = param;
         }
         refreshMarkPointCore(curSelected);
+        </#if>
+        myChart.setOption(option, true);//刷新地图
 }
 
 function refreshMarkPointCore(curSelected){       
@@ -147,7 +150,7 @@ function refreshMarkPointCore(curSelected){
         	//所以第一次进入不执行以下语句
         	
         //}
-        myChart.setOption(option, true);//刷新地图
+        
 };
 
 //将markpoint坐标加入json数组供页面显示用

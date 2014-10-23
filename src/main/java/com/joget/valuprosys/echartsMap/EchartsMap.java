@@ -16,6 +16,8 @@ import com.joget.valuprosys.echartsMap.utils.RegionUtils;
 
 public class EchartsMap extends UserviewMenu {
 
+	private static final String SHOW_TOOL_BOX = "showToolBox";
+	private static final String SHOW_LEGEND = "showLegend";
 	private static final String FALSE = "false";
 	private static final String AREA_SQL = "areaSql";
 	private static final String AREA_CITY_COLUMN_NAME = "areaCityColumnName";
@@ -41,7 +43,7 @@ public class EchartsMap extends UserviewMenu {
 	private static final String LABEL = "Map Page";
 	private static final String TEMPLATES_ECHARTS_MAP_FTL = "/templates/echartsMap.ftl";
 	private static final String ICON = "/plugin/org.joget.apps.userview.lib.HtmlPage/images/grid_icon.gif";
-	private static final List<String> PARAM = Arrays.asList("devMode","width", "height",BACK_GROUND_COLOR,FONT_COLOR, "mapLabel","mapSubLabel","theme","splitNumber","maxValueColor"
+	private static final List<String> PARAM = Arrays.asList("devMode","width", "height",BACK_GROUND_COLOR,FONT_COLOR, "mapLabel","mapSubLabel",SHOW_LEGEND,SHOW_TOOL_BOX,"theme","splitNumber","maxValueColor"
 				,"minValueColor","dataRangeMin","dataRangeMax",TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
 				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,AREA_SQL,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_CITY_COLUMN_NAME);
 	
@@ -98,11 +100,7 @@ public class EchartsMap extends UserviewMenu {
 		//String htmlDataStr = DaoUtils.convertToStandardMapFormat(result, getPropertyString(SERIES_COLUMN_NAME),getPropertyString(CITY_COLUMN_NAME), getPropertyString(QUANTITY_COLUMN_NAME));
 		//param.put("data",htmlDataStr);
 		
-		//大区相关内容
-		String areaDataSql= RegionUtils.getQuerySql(getPropertyString(AREA_SQL),getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_CITY_COLUMN_NAME));
-		String areaData = RegionUtils.queryRegionData(areaDataSql);
-		param.put("areaDataSql", areaDataSql);
-		param.put("areaData", areaData);
+		
 		//存放data块内容
 		List<Map<String, String>> dataList = MapDataFormat.convertToStandardMapFormat(result, getPropertyString(SERIES_COLUMN_NAME).trim(),getPropertyString(CITY_COLUMN_NAME).trim(), getPropertyString(QUANTITY_COLUMN_NAME).trim());
 		
@@ -111,6 +109,11 @@ public class EchartsMap extends UserviewMenu {
 		}else {
 			//用大区数据替换地区数据进行显示
 			param.put("dataVar", null);
+			//大区相关内容
+			String areaDataSql= RegionUtils.getQuerySql(getPropertyString(AREA_SQL),getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_CITY_COLUMN_NAME));
+			String areaData = RegionUtils.queryRegionData(areaDataSql);
+			param.put("areaDataSql", areaDataSql);
+			param.put("areaData", areaData);
 		}
 		//存放序列名称数组
 		List<String> seriesNameList = MapDataFormat.getSeriesNamesWithQuato(getPropertyString(SERIES_COLUMN_NAME).trim(), result);

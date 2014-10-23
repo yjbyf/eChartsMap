@@ -12,10 +12,12 @@
 	${debug}
 	<#if areaShow = "true">
 		大区配置如下:		
-		${areaName}
-		${areaLocations}
-		${areaDataSql}
-		${areaData}
+		<#if areaDataSql ??>
+			${areaName}
+			${areaLocations}
+			${areaDataSql}
+			${areaData}
+		</#if>
 	</#if>
 	
 -->
@@ -219,6 +221,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         ,formatter: "{b}<br/>{c}<br>{a}"
         </#if>
     },
+    <#if showLegend = 'true'>
     legend: {
         orient: 'vertical',
         x:'left',
@@ -240,6 +243,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         </#if>
         data: ${allSeriesLabels}
     },
+    </#if>
     dataRange:dataRangeStyle[1],
     /*
     dataRange: {
@@ -250,6 +254,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         text:['高','低'],           // 文本，默认为数值文本
         calculable : true
     },*/
+    <#if showToolBox='true'>
     toolbox: {
         show: true,
         orient : 'vertical',
@@ -269,6 +274,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
             'china': true
         }
     },
+   </#if> 
    series : [
    	<#if dataVar ??> 	
 		<#list dataVar as map>

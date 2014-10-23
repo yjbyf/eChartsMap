@@ -87,6 +87,34 @@
 				value : '#ffffff',
 				regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]$',
 				validation_message:'非法输入'
+		    },
+		    {
+		    	name:'showLegend',
+				label:'是否显示序列',
+				type:'selectbox',
+				value:'true',
+				options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+		    {
+		    	name:'showToolBox',
+				label:'是否显示工具栏',
+				type:'selectbox',
+				value:'true',
+				options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
 		    }
 		]
 	},
@@ -108,7 +136,7 @@
 		        type:'textfield',
 				required:'True',
 				value : '0',
-				regex_validation:'^[0-9]+$',
+				regex_validation:'^(-)?[0-9]+$',
 				validation_message:'非法输入'
 		    },
 		    {
@@ -126,7 +154,7 @@
 		        type:'textfield',
 				required:'True',
 				value : '0',
-				regex_validation:'^[0-9]+$',
+				regex_validation:'^(-)?[0-9]+$',
 				validation_message:'非法输入'
 		    },
 		    {
