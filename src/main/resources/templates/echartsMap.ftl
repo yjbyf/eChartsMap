@@ -6,6 +6,7 @@
 <script src="${requestUrl}/echarts/esl.js"></script>	
 
 <div id="mapDiv" class="mapDiv" style="height:${height}px;width:${width}px;border:1px solid #ccc;padding:10px;"></div>
+<#if devMode = "yes">
 <!--
 	${result}
 	-------------------
@@ -13,14 +14,15 @@
 	<#if areaShow = "true">
 		大区配置如下:		
 		<#if areaDataSql ??>
-			${areaName}
-			${areaLocations}
-			${areaDataSql}
-			${areaData}
+			大区名:${areaName}
+			大区定义:${areaLocations}
+			areaDataSql:${areaDataSql}
+			areaData:${areaData}
+			大区颜色定义:${areaColor}
 		</#if>
 	</#if>
-	
 -->
+</#if>
 <script>
 	var g_series_seleted;
     var l_geoCoord = {
@@ -259,7 +261,9 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         </#if>
         data: ${allSeriesLabels}
     },
+    <#if showDataRange = 'true'>
     dataRange:dataRangeStyle[1],
+    </#if>
     /*
     dataRange: {
         min: 0,
@@ -317,7 +321,6 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
 	                	}	                	
 	                }
 	            },
-	           
 	            data:${map['data']}
 	            /*,
 	            markPoint : {

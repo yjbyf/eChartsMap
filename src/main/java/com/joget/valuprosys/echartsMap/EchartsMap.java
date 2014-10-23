@@ -16,6 +16,11 @@ import com.joget.valuprosys.echartsMap.utils.RegionUtils;
 
 public class EchartsMap extends UserviewMenu {
 
+	private static final String SHOW_DATA_RANGE = "showDataRange";
+	private static final String AREA_QUANTITY_COLUMN_NAME = "areaQuantityColumnName";
+	private static final String AREA_SERIES_COLUMN_NAME = "areaSeriesColumnName";
+	public static final String CITY = "city";
+	public  static final String AREA_COLOR = "areaColor";
 	private static final String SHOW_TOOL_BOX = "showToolBox";
 	private static final String SHOW_LEGEND = "showLegend";
 	private static final String FALSE = "false";
@@ -43,9 +48,11 @@ public class EchartsMap extends UserviewMenu {
 	private static final String LABEL = "Map Page";
 	private static final String TEMPLATES_ECHARTS_MAP_FTL = "/templates/echartsMap.ftl";
 	private static final String ICON = "/plugin/org.joget.apps.userview.lib.HtmlPage/images/grid_icon.gif";
-	private static final List<String> PARAM = Arrays.asList("devMode","width", "height",BACK_GROUND_COLOR,FONT_COLOR, "mapLabel","mapSubLabel",SHOW_LEGEND,SHOW_TOOL_BOX,"theme","splitNumber","maxValueColor"
+	private static final List<String> PARAM = Arrays.asList("devMode","width", "height",BACK_GROUND_COLOR,FONT_COLOR, "mapLabel","mapSubLabel",
+				SHOW_DATA_RANGE,SHOW_LEGEND,SHOW_TOOL_BOX,"theme","splitNumber","maxValueColor"
 				,"minValueColor","dataRangeMin","dataRangeMax",TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
-				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,AREA_SQL,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_CITY_COLUMN_NAME);
+				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,
+				AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR);
 	
 	private static final String TEMPLATE_PATH = TEMPLATES_ECHARTS_MAP_FTL;
 	private static final String THEME_PATH = "/templates/themes.ftl";
@@ -96,24 +103,32 @@ public class EchartsMap extends UserviewMenu {
 		param.put("markPoint", generateDisplayConfig(param,MARK_POINT_PATH));
 		
 		//DaoUtils dao = new DaoUtils();
-		String result = DaoUtils.execute(getPropertyString(SQL).trim());
+		
 		//String htmlDataStr = DaoUtils.convertToStandardMapFormat(result, getPropertyString(SERIES_COLUMN_NAME),getPropertyString(CITY_COLUMN_NAME), getPropertyString(QUANTITY_COLUMN_NAME));
 		//param.put("data",htmlDataStr);
 		
 		
 		//存放data块内容
-		List<Map<String, String>> dataList = MapDataFormat.convertToStandardMapFormat(result, getPropertyString(SERIES_COLUMN_NAME).trim(),getPropertyString(CITY_COLUMN_NAME).trim(), getPropertyString(QUANTITY_COLUMN_NAME).trim());
-		
+		String result ="";
+		List<Map<String, String>> dataList;
 		if(getPropertyString(AREA_SHOW).equals(FALSE)){
+			result = DaoUtils.execute(getPropertyString(SQL).trim());
+			dataList = MapDataFormat.convertToStandardMapFormat(result, getPropertyString(SERIES_COLUMN_NAME).trim(),getPropertyString(CITY_COLUMN_NAME).trim(), getPropertyString(QUANTITY_COLUMN_NAME).trim());
 			param.put("dataVar", dataList);
 		}else {
 			//用大区数据替换地区数据进行显示
-			param.put("dataVar", null);
+			
 			//大区相关内容
-			String areaDataSql= RegionUtils.getQuerySql(getPropertyString(AREA_SQL),getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_CITY_COLUMN_NAME));
+			String areaDataSql= RegionUtils.getQuerySql(getPropertyString(AREA_SQL),getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_COLOR),getPropertyString(AREA_CITY_COLUMN_NAME));
 			String areaData = RegionUtils.queryRegionData(areaDataSql);
+			areaData = RegionUtils.addCitesToJsonResult(areaData, getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_CITY_COLUMN_NAME));
+			String areaColor = RegionUtils.getRegionColor(getPropertyString(AREA_LOCATIONS), getPropertyString(AREA_COLOR));
+			result = areaData;
+			dataList = MapDataFormat.convertToStandardMapFormat(result, getPropertyString(AREA_SERIES_COLUMN_NAME).trim(),CITY, getPropertyString(AREA_QUANTITY_COLUMN_NAME).trim());
+			param.put("dataVar", dataList);
 			param.put("areaDataSql", areaDataSql);
 			param.put("areaData", areaData);
+			param.put("areaColor", areaColor);
 		}
 		//存放序列名称数组
 		List<String> seriesNameList = MapDataFormat.getSeriesNamesWithQuato(getPropertyString(SERIES_COLUMN_NAME).trim(), result);

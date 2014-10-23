@@ -122,6 +122,21 @@
 		title:'值域配置',
 		properties:[
 			{
+		        name : 'showDataRange',
+		        label : '是否显示',
+		        type : 'selectbox',
+		        required : 'true',
+		        value : 'true',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+		    {
 		        name : 'splitNumber',
 		        label : '值域段数(0为不分段)',
 		        type:'textfield',
@@ -330,14 +345,26 @@
 		        type : 'gridCombine',
 		        columns : [{
 		            key : 'areaName',
+		            required:'true',
 		            label : '大区',
 		            value : '东北'
 		        },
 		        {
 		            key : 'areaLocations',
+		            required:'true',
 		            label : '省市(以英文逗号分隔)',
 		            value :'辽宁,吉林,黑龙江'
-		        }]
+		        },
+		        {
+			        key : 'areaColor',
+			        label : '颜色',
+			        type:'textfield',
+					required:'true',
+					value : '',
+					regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]$',
+					validation_message:'非法输入'
+		    	}],
+		    	value:[]
 		    },
 		    {
 		        name : 'areaSeriesColumnName',

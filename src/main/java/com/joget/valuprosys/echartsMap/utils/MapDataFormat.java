@@ -32,6 +32,19 @@ public class MapDataFormat {
 	 * 
 	 * }
 	 */
+	private static JSONObject getAreaColorJSON(String color){
+		JSONObject jsonObject = new JSONObject();
+		JSONObject normalObject = new JSONObject();
+		try {
+			normalObject.put("color", color);
+			jsonObject.put("normal", normalObject);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return jsonObject;
+	};
 	
 	private static String convertToStandardMapFormatWithSingleSeries(String data, String seriesName, String seriesColumnName, String cityColumnName, String quantityColumnName) {
 		JSONArray myJsonArray;
@@ -45,6 +58,15 @@ public class MapDataFormat {
 					newObject.put(EchartsMap.CITY_ARRAY_NAME, myjObject.get(cityColumnName));
 					//数值部分不需要双引号，否则页面没法计算总和
 					String quantity = myjObject.get(quantityColumnName).toString();
+					if(myjObject.has(EchartsMap.AREA_COLOR)){
+						String areaColor = myjObject.get(EchartsMap.AREA_COLOR).toString();
+						//得到大区相关的底色配置json
+						if(areaColor!=null&&areaColor.length()>0){
+							JSONObject colorJson = getAreaColorJSON(areaColor);
+							newObject.put("itemStyle", colorJson);
+						}
+					}
+					
 					if (quantity==null){
 						quantity="0";
 					}
