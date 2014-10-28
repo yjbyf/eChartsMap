@@ -115,6 +115,20 @@
 		            value : 'false',
 		            label : 'false'
 		        }]
+		    },
+		    {
+		    	name:'showProvince',
+				label:'是否显示二级省市',
+				type:'selectbox',
+				value:'true',
+				options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
 		    }
 		]
 	},
@@ -327,6 +341,21 @@
 			{
 		        name : 'areaShow',
 		        label : '是否大区视图展示数据(大区优于省市显示)',
+		        type : 'selectbox',
+		        required : 'true',
+		        value : 'false',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+		    {
+		        name : 'areaTableShow',
+		        label : '是否显示大区数据表格',
 		        type : 'selectbox',
 		        required : 'true',
 		        value : 'false',

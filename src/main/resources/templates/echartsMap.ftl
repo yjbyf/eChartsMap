@@ -6,6 +6,26 @@
 <script src="${requestUrl}/echarts/esl.js"></script>	
 
 <div id="mapDiv" class="mapDiv" style="height:${height}px;width:${width}px;border:1px solid #ccc;padding:10px;"></div>
+<#if areaTableShow = 'true'>
+<div>            
+	<#if areaVar ??>
+	 <table align="center" border="1" cellpadding="0" cellspacing="0" width="90%">
+	    <tr align="center">
+	        <th>序列</th>
+	        <th>大区</th>
+	        <th>值</th>
+	    </tr>
+	    <#list areaVar as map>
+	    <tr align="center">
+	        <td>${map['areaTableSeriesLabel']}</td>
+	        <td><span class="text-primary">${map['areaTableAreaLabel']}</span></td>
+	        <td><span id='console' style="color:#1e90ff">${map['areaTableQuantityLabel']}</span> </td>    
+	    </th>
+	    </#list>
+	</table>
+	</#if>
+</div>
+</#if>
 <#if devMode = "yes">
 <!--
 	${result}
@@ -17,6 +37,7 @@
 			大区名:${areaName}
 			大区定义:${areaLocations}
 			areaDataSql:${areaDataSql}
+			大区原始数据:${allAreaData}
 			areaData:${areaData}
 			大区颜色定义:${areaColor}
 		</#if>
@@ -93,6 +114,7 @@
     ${themeParts}
 	${dataRangeStyle}
 ///////////////////////////////////////////////////////地图缩放start
+<#if showProvince = 'true' >
 var ecConfig = echarts.config;//require('echarts/config');
 var zrEvent = zrender.tool.event;
 //var zrEvent = require('zrender/tool/event');
@@ -195,13 +217,14 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     //需要切换前后的序列数据要保持刷新一致，则定义个全局变量数组g_series_seleted，存放用户选择的序列，然后调用在if判断之间加入refreshMarkPoint(g_series_seleted)生成markpoint，
     //并且修改refreshMarkPoint的逻辑，当用户选择变更时，对全局变量数组进行写操作，保持数据一致
     //写操作：g_series_seleted=param
-    <#if markPointShowOrNot='true'>
+    <#if markPointShowOrNot='true' && areaShow='false'>
     	refreshMarkPoint(g_series_seleted);//其中已带有myChart.setOption(option, true);操作，所以用if判断
     </#if>	
-    <#if markPointShowOrNot='false'>
+    <#if markPointShowOrNot='false' || areaShow='true'>
     	myChart.setOption(option, true);//true后，原有markpoint都失效
     </#if>
 });
+</#if>
 ///////////////////////////////////////////////////////地图缩放end
    
     var option = {

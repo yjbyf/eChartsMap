@@ -16,6 +16,8 @@ import com.joget.valuprosys.echartsMap.utils.RegionUtils;
 
 public class EchartsMap extends UserviewMenu {
 
+	private static final String AREA_TABLE_SHOW = "areaTableShow";
+	private static final String SHOW_PROVINCE = "showProvince";
 	private static final String SHOW_DATA_RANGE = "showDataRange";
 	private static final String AREA_QUANTITY_COLUMN_NAME = "areaQuantityColumnName";
 	private static final String AREA_SERIES_COLUMN_NAME = "areaSeriesColumnName";
@@ -50,9 +52,9 @@ public class EchartsMap extends UserviewMenu {
 	private static final String ICON = "/plugin/org.joget.apps.userview.lib.HtmlPage/images/grid_icon.gif";
 	private static final List<String> PARAM = Arrays.asList("devMode","width", "height",BACK_GROUND_COLOR,FONT_COLOR, "mapLabel","mapSubLabel",
 				SHOW_DATA_RANGE,SHOW_LEGEND,SHOW_TOOL_BOX,"theme","splitNumber","maxValueColor"
-				,"minValueColor","dataRangeMin","dataRangeMax",TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
+				,"minValueColor","dataRangeMin","dataRangeMax",SHOW_PROVINCE,TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
 				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,
-				AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR);
+				AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR,AREA_TABLE_SHOW);
 	
 	private static final String TEMPLATE_PATH = TEMPLATES_ECHARTS_MAP_FTL;
 	private static final String THEME_PATH = "/templates/themes.ftl";
@@ -121,12 +123,18 @@ public class EchartsMap extends UserviewMenu {
 			//大区相关内容
 			String areaDataSql= RegionUtils.getQuerySql(getPropertyString(AREA_SQL),getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_COLOR),getPropertyString(AREA_CITY_COLUMN_NAME));
 			String areaData = RegionUtils.queryRegionData(areaDataSql);
+			String allAreaData = areaData;
 			areaData = RegionUtils.addCitesToJsonResult(areaData, getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_CITY_COLUMN_NAME));
 			String areaColor = RegionUtils.getRegionColor(getPropertyString(AREA_LOCATIONS), getPropertyString(AREA_COLOR));
 			result = areaData;
+			//以CITY得到省市数据
 			dataList = MapDataFormat.convertToStandardMapFormat(result, getPropertyString(AREA_SERIES_COLUMN_NAME).trim(),CITY, getPropertyString(AREA_QUANTITY_COLUMN_NAME).trim());
+			//AREA_CITY_COLUMN_NAME-->areaCityColumnName地区列名得到大区数据
+			List<Map<String, String>> areaTableList = MapDataFormat.convertToMapFormat(allAreaData, getPropertyString(AREA_SERIES_COLUMN_NAME).trim(),getPropertyString(AREA_CITY_COLUMN_NAME), getPropertyString(AREA_QUANTITY_COLUMN_NAME).trim());
 			param.put("dataVar", dataList);
+			param.put("areaVar", areaTableList);
 			param.put("areaDataSql", areaDataSql);
+			param.put("allAreaData",allAreaData);
 			param.put("areaData", areaData);
 			param.put("areaColor", areaColor);
 		}

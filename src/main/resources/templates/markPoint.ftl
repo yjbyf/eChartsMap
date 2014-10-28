@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////序列选择后刷新地图上的数字Start
 //要先配置是否显示数字
 //console.log(${markPointShowOrNot});
+//配置显示大区，则markpoint放哪里不好放，故大区的时候不显示markpoint
 <#if markPointShowOrNot='true' && areaShow='false' >
 myChart.on(echarts.config.EVENT.LEGEND_SELECTED,refreshMarkPoint);
 var curLegend; //用于标注markpoint用

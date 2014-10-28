@@ -151,4 +151,26 @@ public class MapDataFormat {
 		}
 		return result;
 	}
+	
+	public static List<Map<String, String>> convertToMapFormat(String data, String seriesColumnName, String areaColumnName, String quantityColumnName) {
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		JSONArray myJsonArray;
+		try {
+			myJsonArray = new JSONArray(data);
+			
+			// 根据序列清单，得到相关符合格式的数据
+			for (int i=0;i<myJsonArray.length();i++) {
+				JSONObject jsonObject = myJsonArray.getJSONObject(i);
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("areaTableSeriesLabel", jsonObject.getString(seriesColumnName));
+				map.put("areaTableAreaLabel", jsonObject.getString(areaColumnName));
+				map.put("areaTableQuantityLabel", jsonObject.getString(quantityColumnName));
+				result.add(map);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	};
 }
