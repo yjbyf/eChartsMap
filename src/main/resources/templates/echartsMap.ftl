@@ -4,8 +4,8 @@
 <script src="${requestUrl}/echarts/echarts-plain-original-map.js"></script>
 </#if>
 <script src="${requestUrl}/echarts/esl.js"></script>	
-
-<div id="mapDiv" class="mapDiv" style="height:${height}px;width:${width}px;border:1px solid #ccc;padding:10px;"></div>
+<!--todo no border-->
+<div id="mapDiv" class="mapDiv" style="height:${height}px;width:${width}px;border:0px;padding:10px;"></div>
 <#if areaTableShow = 'true'>
 <div>            
 	<#if areaVar ??>

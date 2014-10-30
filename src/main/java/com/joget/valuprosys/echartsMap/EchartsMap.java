@@ -113,9 +113,11 @@ public class EchartsMap extends UserviewMenu {
 		//存放data块内容
 		String result ="";
 		List<Map<String, String>> dataList;
+		List<String> seriesNameList;
 		if(getPropertyString(AREA_SHOW).equals(FALSE)){
 			result = DaoUtils.execute(getPropertyString(SQL).trim());
 			dataList = MapDataFormat.convertToStandardMapFormat(result, getPropertyString(SERIES_COLUMN_NAME).trim(),getPropertyString(CITY_COLUMN_NAME).trim(), getPropertyString(QUANTITY_COLUMN_NAME).trim());
+			seriesNameList = MapDataFormat.getSeriesNamesWithQuato(getPropertyString(SERIES_COLUMN_NAME).trim(), result);
 			param.put("dataVar", dataList);
 		}else {
 			//用大区数据替换地区数据进行显示
@@ -131,6 +133,7 @@ public class EchartsMap extends UserviewMenu {
 			dataList = MapDataFormat.convertToStandardMapFormat(result, getPropertyString(AREA_SERIES_COLUMN_NAME).trim(),CITY, getPropertyString(AREA_QUANTITY_COLUMN_NAME).trim());
 			//AREA_CITY_COLUMN_NAME-->areaCityColumnName地区列名得到大区数据
 			List<Map<String, String>> areaTableList = MapDataFormat.convertToMapFormat(allAreaData, getPropertyString(AREA_SERIES_COLUMN_NAME).trim(),getPropertyString(AREA_CITY_COLUMN_NAME), getPropertyString(AREA_QUANTITY_COLUMN_NAME).trim());
+			seriesNameList = MapDataFormat.getSeriesNamesWithQuato(getPropertyString(AREA_SERIES_COLUMN_NAME).trim(), result);
 			param.put("dataVar", dataList);
 			param.put("areaVar", areaTableList);
 			param.put("areaDataSql", areaDataSql);
@@ -139,7 +142,7 @@ public class EchartsMap extends UserviewMenu {
 			param.put("areaColor", areaColor);
 		}
 		//存放序列名称数组
-		List<String> seriesNameList = MapDataFormat.getSeriesNamesWithQuato(getPropertyString(SERIES_COLUMN_NAME).trim(), result);
+		 
 		param.put("allSeriesLabels", seriesNameList.toString());
 		param.put("allSeriesLabelsList", seriesNameList);//用于legend序列单选和复选的配置
 		//System.err.println((getPropertyString(SQL)));

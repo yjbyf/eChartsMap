@@ -40,7 +40,7 @@ public class RegionUtils {
 		for (int i = 0; i < regionNameList.length; i++) {
 			// 得到当前地区定义的省市列表
 			String quatoCitiesDefine = addQuatoToCitiesDefine(regionDefineList[i]);
-			String insertBeforeGroupBy = processedSql.substring(0, processedSql.toLowerCase().indexOf(GROUP) - 1) + SPACE + " where " + regionLocationColumnName + " in (" + quatoCitiesDefine + ")"
+			String insertBeforeGroupBy = processedSql.substring(0, processedSql.toLowerCase().indexOf(GROUP) - 1) + SPACE + " and " + regionLocationColumnName + " in (" + quatoCitiesDefine + ")"
 					+ SPACE + processedSql.substring(processedSql.toLowerCase().indexOf(GROUP));
 			result = result + " select '" + regionNameList[i] + "' as " + regionLocationColumnName + "," + "'" + colorDefineList[i] + "' as " + EchartsMap.AREA_COLOR + ",t.* from ("
 					+ insertBeforeGroupBy + ") t " + UNION;
@@ -107,7 +107,7 @@ public class RegionUtils {
 	}
 
 	public static void main(String[] args) {
-		String sql = "select product ,sum(price) quantity from oe_order_all group by product;";
+		String sql = "select product ,sum(price) quantity from oe_order_all where 1=1 group by product;";
 		String regionName = "西北区;西南区";
 		String regionDefine = "新疆,内蒙古;西藏,四川";
 		String colorDefine = "red;yellow";
