@@ -40,6 +40,7 @@
 			大区原始数据:${allAreaData}
 			areaData:${areaData}
 			大区颜色定义:${areaColor}
+			省市映射大区定义:<#if cityToRegion ??>${cityToRegion}</#if>
 		</#if>
 	</#if>
 -->
@@ -243,7 +244,11 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         }*/
         </#if>
         <#if tooltipShowDetail='true'>
-        ,formatter: "{b}<br/>{c}<br>{a}"
+        //,formatter: "{b}<br/>{c}<br>{a}"
+        ,formatter: function (params,ticket,callback) {
+            var res = getRegionLabel(params[1])+"<br/>"+params[2]+"<br>"+params[0];
+            return res;
+        }
         </#if>
     },
     <#if showLegend = 'true'>
@@ -393,4 +398,23 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     
     myChart.setOption(option);
     myChart.restore();
+    
+    
+    //省市到大区转换
+    function getRegionLabel(location){
+    	<#if cityToRegion ??>	
+	    var regionDefine = ${cityToRegion};
+	    var returnLabel = location;
+	    for(var i=0;i<regionDefine.length;i++){
+	        if(regionDefine[i][location]!=undefined){
+	            returnLabel = regionDefine[i][location];
+	        }
+	    }
+    	return returnLabel;
+    	</#if>
+    	//无大区定义直接返回原字符串
+    	return location;
+    };	
+	
+
 </script>

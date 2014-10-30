@@ -134,12 +134,16 @@ public class EchartsMap extends UserviewMenu {
 			//AREA_CITY_COLUMN_NAME-->areaCityColumnName地区列名得到大区数据
 			List<Map<String, String>> areaTableList = MapDataFormat.convertToMapFormat(allAreaData, getPropertyString(AREA_SERIES_COLUMN_NAME).trim(),getPropertyString(AREA_CITY_COLUMN_NAME), getPropertyString(AREA_QUANTITY_COLUMN_NAME).trim());
 			seriesNameList = MapDataFormat.getSeriesNamesWithQuato(getPropertyString(AREA_SERIES_COLUMN_NAME).trim(), result);
+			
+			String cityToRegion = RegionUtils.getCityToRegion(getPropertyString(AREA_NAME), getPropertyString(AREA_LOCATIONS));
+			
 			param.put("dataVar", dataList);
 			param.put("areaVar", areaTableList);
 			param.put("areaDataSql", areaDataSql);
 			param.put("allAreaData",allAreaData);
 			param.put("areaData", areaData);
 			param.put("areaColor", areaColor);
+			param.put("cityToRegion", cityToRegion);
 		}
 		//存放序列名称数组
 		 

@@ -73,6 +73,29 @@ public class RegionUtils {
 		}
 		return array.toString();
 	}
+	
+	public static String getCityToRegion(String regionDefineStr,String cityDefineStr){
+		String regionDefineList[] = regionDefineStr.split(SPLIT);
+		String cityDefineList[] = cityDefineStr.split(SPLIT);
+		JSONArray array = new JSONArray();
+		for (int i = 0; i < cityDefineList.length; i++) {
+			String cities = cityDefineList[i];
+			String citiesList[] = cities.split(COMMA);
+			for (int j = 0; j < citiesList.length; j++) {
+				try {
+					JSONObject jsonObj = new JSONObject();
+					// System.err.println(j+citiesList[j]);
+					jsonObj.put(citiesList[j],regionDefineList[i]);
+					array.put(jsonObj);
+					// System.err.println(array.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return array.toString();
+	}
 
 	/**
 	 * 城市列表加上单引号
