@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.joget.valuprosys.echartsMap</groupId>
     <artifactId>echartsMap</artifactId>
@@ -72,51 +75,56 @@
             <artifactId>spring</artifactId>
             <version>2.5.6.SEC03</version>
             <scope>provided</scope>
-            <!-- <scope>test</scope> -->
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>2.5.6.SEC03</version>
             <scope>test</scope>
-        </dependency>        
-        <dependency>
-		    <groupId>org.freemarker</groupId>
-		    <artifactId>freemarker</artifactId>
-		    <version>2.3.21</version>
-		</dependency>
-        <dependency>
-          <groupId>org.json</groupId>
-          <artifactId>json</artifactId>
-          <version>20090211</version>
         </dependency>
         <dependency>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.core</artifactId>
-          <version>4.3.1</version>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.21</version>
         </dependency>
-        <dependency>
-             <groupId>org.joget</groupId>
-             <artifactId>wflow-core</artifactId>
-             <version>4.0.8</version>
-        </dependency>
-        <dependency>
-             <groupId>org.joget</groupId>
-             <artifactId>wflow-plugin-base</artifactId>
-             <version>4.0.8</version>
-        </dependency>
-
-       
-       <dependency>
-          <groupId>org.joget</groupId>
-          <artifactId>wflow_commons</artifactId>
-          <version>4.0.8</version>
-        </dependency> 
-        
-
-
         <!-- Change plugin specific dependencies here -->
-        
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20140107</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.joget</groupId>
+            <artifactId>wflow-core</artifactId>
+            <version>4.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+              <groupId>org.joget</groupId>
+              <artifactId>wflow_common</artifactId>
+              <version>4.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+              <groupId>org.joget</groupId>
+              <artifactId>wflow-plugin-base</artifactId>
+              <version>4.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>2.5.6.SEC03</version>
+            <scope>provide</scope>
+        </dependency> -->
         <!-- End change plugin specific dependencies here -->
     </dependencies>
     <distributionManagement>
