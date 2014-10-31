@@ -68,8 +68,15 @@ public class EchartsMap extends UserviewMenu {
 	public static final String CITY_ARRAY_NAME = "name";
 	public static final String CITY_ARRAY_VALUE = "value";
 	
-	private PluginManager pluginManager = (PluginManager)AppUtil.getApplicationContext().getBean("pluginManager");
+	private PluginManager pluginManager;
 
+	private PluginManager getPluginManager(){
+		if (pluginManager==null){
+			pluginManager = (PluginManager)AppUtil.getApplicationContext().getBean("pluginManager");
+		}
+		return pluginManager;
+	}
+	
 	@Override
 	public String getClassName() {
 		return getClass().getName();
@@ -156,13 +163,13 @@ public class EchartsMap extends UserviewMenu {
 		//调试信息
 		param.put("result", result);
 		param.put("debug", dataList.toString());
-		String content = pluginManager.getPluginFreeMarkerTemplate(param, getClass().getName(),TEMPLATE_PATH, null);
+		String content = getPluginManager().getPluginFreeMarkerTemplate(param, getClass().getName(),TEMPLATE_PATH, null);
 		
     	return content;
 	}
 
 	private String generateDisplayConfig(Map<String, Object> param,String templateFile){
-		String content = pluginManager.getPluginFreeMarkerTemplate(param, getClass().getName(),templateFile, null);
+		String content = getPluginManager().getPluginFreeMarkerTemplate(param, getClass().getName(),templateFile, null);
 		
     	return content;
 	}
