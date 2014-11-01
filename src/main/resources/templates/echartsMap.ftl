@@ -43,6 +43,7 @@
 			省市映射大区定义:<#if cityToRegion ??>${cityToRegion}</#if>
 		</#if>
 	</#if>
+	<#if openUrl ??>${openUrl}</#if>
 -->
 </#if>
 <script>
@@ -114,8 +115,7 @@
     
     ${themeParts}
 	${dataRangeStyle}
-///////////////////////////////////////////////////////地图缩放start
-<#if showProvince = 'true' >
+
 var ecConfig = echarts.config;//require('echarts/config');
 var zrEvent = zrender.tool.event;
 //var zrEvent = require('zrender/tool/event');
@@ -134,7 +134,27 @@ var mapType = [
     '北京', '天津', '上海', '重庆',
     // 2个特别行政区
     '香港', '澳门'
-];
+];	
+///////////////////////////////////////////////////////地图跳转优先级优于地图缩放优于地图缩放前面
+///////////////////////////////////////////////////////地图跳转start
+<#if openUrlFlag = 'true' >
+	myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
+	    var len = mapType.length;
+		var mt ;
+        var selected = param.selected;
+        for (var i in selected) {
+            if (selected[i]) {
+                mt = i;            
+                break;
+            }
+        }    	
+		var openUrl = "${openUrl}";
+		openUrl = openUrl.replace('%40LOCATION%40', mt);
+		window.open(openUrl);
+		
+	});
+///////////////////////////////////////////////////////地图缩放start
+<#elseif showProvince = 'true' >
 document.getElementById('mapDiv').onmousewheel = function (e){
     var event = e || window.event;
     curIndx += zrEvent.getDelta(event) > 0 ? (-1) : 1;
@@ -225,9 +245,10 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     	myChart.setOption(option, true);//true后，原有markpoint都失效
     </#if>
 });
-</#if>
 ///////////////////////////////////////////////////////地图缩放end
-   
+</#if>
+///////////////////////////////////////////////////////地图跳转end
+
     var option = {
     title : {
         text: '${mapLabel}',

@@ -24,7 +24,7 @@ public class RegionUtils {
 
 	private static final String SPACE = " ";
 	private static final String UNION = "union";
-	private final static String SPLIT = ";";
+	public final static String SPLIT = ";";
 	private final static String COMMA = ",";
 	private final static String GROUP = "group";
 

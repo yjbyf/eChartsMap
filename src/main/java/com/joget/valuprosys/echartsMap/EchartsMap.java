@@ -12,10 +12,16 @@ import org.joget.plugin.base.PluginManager;
 
 import com.joget.valuprosys.echartsMap.database.DaoUtils;
 import com.joget.valuprosys.echartsMap.utils.MapDataFormat;
+import com.joget.valuprosys.echartsMap.utils.OpenUrlUtils;
 import com.joget.valuprosys.echartsMap.utils.RegionUtils;
 
 public class EchartsMap extends UserviewMenu {
 
+	private static final String OPEN_URL_PARAM_NAME = "openUrlParamName";
+	private static final String OPEN_URL_PARAM_VALUE = "openUrlParamValue";
+	private static final String OPEN_URL_PARAM_OF_MAP = "openUrlParamOfMap";
+	private static final String OPEN_URL = "openUrl";
+	private static final String OPEN_URL_FLAG = "openUrlFlag";
 	private static final String AREA_TABLE_SHOW = "areaTableShow";
 	private static final String SHOW_PROVINCE = "showProvince";
 	private static final String SHOW_DATA_RANGE = "showDataRange";
@@ -54,7 +60,8 @@ public class EchartsMap extends UserviewMenu {
 				SHOW_DATA_RANGE,SHOW_LEGEND,SHOW_TOOL_BOX,"theme","splitNumber","maxValueColor"
 				,"minValueColor","dataRangeMin","dataRangeMax",SHOW_PROVINCE,TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
 				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,
-				AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR,AREA_TABLE_SHOW);
+				AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR,AREA_TABLE_SHOW,
+				OPEN_URL_FLAG,OPEN_URL,OPEN_URL_PARAM_OF_MAP,OPEN_URL_PARAM_VALUE,OPEN_URL_PARAM_VALUE);
 	
 	private static final String TEMPLATE_PATH = TEMPLATES_ECHARTS_MAP_FTL;
 	private static final String THEME_PATH = "/templates/themes.ftl";
@@ -152,8 +159,15 @@ public class EchartsMap extends UserviewMenu {
 			param.put("areaColor", areaColor);
 			param.put("cityToRegion", cityToRegion);
 		}
-		//存放序列名称数组
-		 
+		//得到跳转url相关内容
+		String url = getPropertyString(OPEN_URL);
+		String locationParam = getPropertyString(OPEN_URL_PARAM_OF_MAP);
+		String locationValue = "@LOCATION@";
+		String paramNames = getPropertyString(OPEN_URL_PARAM_NAME);
+		String paramValues = getPropertyString(OPEN_URL_PARAM_VALUE);
+		String openUrl = OpenUrlUtils.getFullUrl(url, locationParam, locationValue, paramNames, paramValues);
+		param.put("openUrl", openUrl);
+		//存放序列名称数组		 
 		param.put("allSeriesLabels", seriesNameList.toString());
 		param.put("allSeriesLabelsList", seriesNameList);//用于legend序列单选和复选的配置
 		//System.err.println((getPropertyString(SQL)));

@@ -426,5 +426,54 @@
 				value : 'select sum(quantity) as quantity,product as series from tableName group by product;'
 			}			
 		]
-	}	
+	},
+	{
+		title:'地图跳转设置',
+		properties:[
+			{
+		        name : 'openUrlFlag',
+		        label : '是否跳转地图(跳转地图优于省市显示)',
+		        type : 'selectbox',
+		        required : 'false',
+		        value : 'false',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+		    {
+		    	name : 'openUrl',
+		        label : 'url地址',
+		        type : 'textfield',
+		        required : 'false',
+		        value : 'http://map.baidu.com'
+		    },
+		    {
+		    	name : 'openUrlParamOfMap',
+		        label : '地名参数名',
+		        type : 'textfield',
+		        required : 'false',
+		        value : 'location'
+		    },
+		    {
+		        name : 'openUrlParams',
+		        label : 'url参数',
+		        type : 'gridCombine',
+		        columns : [{
+			            key : 'openUrlParamName',
+			            required:'true',
+			            label : '参数'
+			        },
+			        {
+			            key : 'openUrlParamValue',
+			            required:'true',
+			            label : '参数值'
+			        }]		    	
+		    }
+		]
+	}		   	
 ]
