@@ -418,14 +418,79 @@
 		    },
 		    {
 				name:'areaSql',
-				label:'查询sql',
+				label:'大区查询sql',
 				type : 'textarea',
 		        cols : '60',
 		        rows : '15',
 				required:'True',
 				value : 'select sum(quantity) as quantity,product as series from tableName group by product;'
+			},
+			{
+				name:'areaProvinceySql',
+				label:'省市查询sql',
+				type : 'textarea',
+		        cols : '60',
+		        rows : '15',
+				required:'True',
+				value : 'SELECT  product as series, location as name,SUM(price) as value   FROM   oe_order_all   group by product, location;'
 			}			
 		]
+	},
+	{
+		title:'大区设置--混搭图',
+		properties:[
+			{
+		        name : 'showSubDetail',
+		        label : '是否显示混搭图',
+		        type : 'selectbox',
+		        required : 'false',
+		        value : 'false',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+		    {
+				name:'inRadius',
+				label:'内径',
+				type:'textfield',
+				required:'True',
+				value:'10',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+			},
+		    {
+				name:'outRadius',
+				label:'外径',
+				type:'textfield',
+				required:'True',
+				value:'30',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+			},
+			{
+				name:'vPos',
+				label:'水平位移(距离地图右边)',
+				type:'textfield',
+				required:'True',
+				value:'80',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+			},
+			{
+				name:'hPos',
+				label:'垂直位移(距离地图底部)',
+				type:'textfield',
+				required:'True',
+				value:'150',
+				regex_validation:'^[0-9]+$',
+				validation_message:'非法输入'
+			}
+	 	 ]
 	},
 	{
 		title:'地图跳转设置',
@@ -475,5 +540,5 @@
 			        }]		    	
 		    }
 		]
-	}		   	
+	}   	   	
 ]

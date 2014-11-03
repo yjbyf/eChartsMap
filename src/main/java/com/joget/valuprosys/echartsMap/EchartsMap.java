@@ -17,6 +17,12 @@ import com.joget.valuprosys.echartsMap.utils.RegionUtils;
 
 public class EchartsMap extends UserviewMenu {
 
+	private static final String AREA_PROVINCEY_SQL = "areaProvinceySql";
+	private static final String SHOW_SUB_DETAIL = "showSubDetail";
+	private static final String H_POS = "hPos";
+	private static final String V_POS = "vPos";
+	private static final String OUT_RADIUS = "outRadius";
+	private static final String IN_RADIUS = "inRadius";
 	private static final String OPEN_URL_PARAM_NAME = "openUrlParamName";
 	private static final String OPEN_URL_PARAM_VALUE = "openUrlParamValue";
 	private static final String OPEN_URL_PARAM_OF_MAP = "openUrlParamOfMap";
@@ -60,8 +66,9 @@ public class EchartsMap extends UserviewMenu {
 				SHOW_DATA_RANGE,SHOW_LEGEND,SHOW_TOOL_BOX,"theme","splitNumber","maxValueColor"
 				,"minValueColor","dataRangeMin","dataRangeMax",SHOW_PROVINCE,TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
 				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,
-				AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR,AREA_TABLE_SHOW,
-				OPEN_URL_FLAG,OPEN_URL,OPEN_URL_PARAM_OF_MAP,OPEN_URL_PARAM_VALUE,OPEN_URL_PARAM_VALUE);
+				AREA_PROVINCEY_SQL,AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR,AREA_TABLE_SHOW,
+				OPEN_URL_FLAG,OPEN_URL,OPEN_URL_PARAM_OF_MAP,OPEN_URL_PARAM_VALUE,OPEN_URL_PARAM_VALUE,
+				SHOW_SUB_DETAIL,IN_RADIUS,OUT_RADIUS,V_POS,H_POS);
 	
 	private static final String TEMPLATE_PATH = TEMPLATES_ECHARTS_MAP_FTL;
 	private static final String THEME_PATH = "/templates/themes.ftl";
@@ -139,6 +146,7 @@ public class EchartsMap extends UserviewMenu {
 			//大区相关内容
 			String areaDataSql= RegionUtils.getQuerySql(getPropertyString(AREA_SQL),getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_COLOR),getPropertyString(AREA_CITY_COLUMN_NAME));
 			String areaData = RegionUtils.queryRegionData(areaDataSql);
+			String areaProvinceData = RegionUtils.queryRegionData(getPropertyString(AREA_PROVINCEY_SQL));
 			String allAreaData = areaData;
 			areaData = RegionUtils.addCitesToJsonResult(areaData, getPropertyString(AREA_NAME),getPropertyString(AREA_LOCATIONS),getPropertyString(AREA_CITY_COLUMN_NAME));
 			String areaColor = RegionUtils.getRegionColor(getPropertyString(AREA_LOCATIONS), getPropertyString(AREA_COLOR));
@@ -158,6 +166,7 @@ public class EchartsMap extends UserviewMenu {
 			param.put("areaData", areaData);
 			param.put("areaColor", areaColor);
 			param.put("cityToRegion", cityToRegion);
+			param.put("areaProvinceData", areaProvinceData);
 		}
 		//得到跳转url相关内容
 		String url = getPropertyString(OPEN_URL);

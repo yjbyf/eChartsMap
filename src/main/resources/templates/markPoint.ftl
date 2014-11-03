@@ -148,7 +148,9 @@ function refreshMarkPointCore(curSelected,curOption){
     
         //console.log(datas);
         //var dataold = curOption.series[0].markPoint.data;
-        legendIndex=curOption.series.length-1;
+        
+        legendIndex = getMarkPointIndex();
+        //legendIndex=curOption.series.length-1;
         curOption.series[legendIndex].markPoint.data=datas; //地图显示数据赋值
         curOption.series[legendIndex].geoCoord = l_geoCoord;//地图坐标赋值
        

@@ -38,6 +38,7 @@
 			大区定义:${areaLocations}
 			areaDataSql:${areaDataSql}
 			大区原始数据:${allAreaData}
+			大区明细数据:${areaProvinceData}
 			areaData:${areaData}
 			大区颜色定义:${areaColor}
 			省市映射大区定义:<#if cityToRegion ??>${cityToRegion}</#if>
@@ -85,6 +86,7 @@
                     '香港':[114.18612410257,22.29358599328],
                     '澳门':[113.55751910182,22.204117988443]
                 };
+    var mapDivName = "mapDiv";            
 	//var domMain = document.getElementById("mapDiv");
     //var myChart = echarts.init(domMain);
     var chart_path = "${requestUrl}/echarts/echarts-plain-original-map"; 
@@ -110,7 +112,7 @@
     var domMain ;
     var myChart ;
     
-    domMain = document.getElementById('mapDiv');
+    domMain = document.getElementById(mapDivName);
     myChart = echarts.init(domMain);
     
     ${themeParts}
@@ -155,7 +157,7 @@ var mapType = [
 	});
 ///////////////////////////////////////////////////////地图缩放start
 <#elseif showProvince = 'true' >
-document.getElementById('mapDiv').onmousewheel = function (e){
+document.getElementById(mapDivName).onmousewheel = function (e){
     var event = e || window.event;
     curIndx += zrEvent.getDelta(event) > 0 ? (-1) : 1;
     if (curIndx < 0) {
@@ -195,8 +197,9 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                 //console.log("地图切换前:");
                 //console.log(option.series[0].mapType);
                 //数据切换
-                curCountryData = option.series[option.series.length-1].markPoint.data;//保存数据供切换回全国地图使用
-                option.series[option.series.length-1].markPoint.data = [];
+                var legendIndex = getMarkPointIndex();
+                curCountryData = option.series[legendIndex].markPoint.data;//保存数据供切换回全国地图使用
+                option.series[legendIndex].markPoint.data = [];
                 
                 /*
                 for(var i=0;i<option.series.length;i++){
@@ -205,7 +208,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                 	option.series[i].geoCoord = [];
                 }*/                
                 
-                //option.series[option.series.length-1].geoCoord = [];
+                
                 break;
             }
         }
@@ -219,8 +222,9 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
             	option.series[i].markPoint.data = curCountryData[i];   
             	option.series[i].geoCoord = l_geoCoord;         	
         }*/
-        option.series[option.series.length-1].markPoint.data = curCountryData;
-        //option.series[option.series.length-1].geoCoord = l_geoCoord;
+        var legendIndex = getMarkPointIndex();
+        option.series[legendIndex].markPoint.data = curCountryData;
+        
         //option.tooltip.formatter = '滚轮切换或点击进入该省<br/>{b}';
     }
     
@@ -246,8 +250,14 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     </#if>
 });
 ///////////////////////////////////////////////////////地图缩放end
-</#if>
+
 ///////////////////////////////////////////////////////地图跳转end
+///////////////////////////////////////////////////////混搭地图start
+<#elseif showSubDetail = 'true' >
+	myChart.on(ecConfig.EVENT.MAP_SELECTED,refreshPie);
+	myChart.on(echarts.config.EVENT.LEGEND_SELECTED,refreshPieFromLegend);
+///////////////////////////////////////////////////////混搭地图end
+</#if>
 
     var option = {
     title : {
@@ -410,7 +420,23 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                     data : [] 
                 },
                 geoCoord: l_geoCoord
-          }
+       }
+       <#if showSubDetail = 'true' && areaShow = 'true'>
+       ,
+       {
+            name:'大区内数据对比',
+            type:'pie',
+            roseType : 'area',
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            center: [document.getElementById(mapDivName).offsetWidth - ${vPos}, document.getElementById(mapDivName).offsetHeight - ${hPos}],
+            radius: [${inRadius}, ${outRadius}],
+            data:[              
+            ]
+        }
+        </#if>
     ]
 };
     
@@ -437,5 +463,130 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     	return location;
     };	
 	
+	function getMarkPointIndex(){
+		var result = -1;
+		for(var i=0;i<option.series.length;i++){        	
+        	if(option.series[i].type!='map'){        		
+        		break;
+        	}
+        	result = i ;
+        }
+        return result;
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	//大区混搭图js start
+	function getPieIndex(){
+        var result = -1;
+        for(var i=0;i<option.series.length;i++){            
+            if(option.series[i].type!='map'){  
+                result = i ;             
+                break;
+            }            
+        }
+        return result;
+    }
 
+    var gSelectedProvince;
+    function refreshPie(param){
+        getSelectdMap(param);
+        var data  = getPieDataCore(gSelectedProvince)
+        //console.log(getPieIndex());    
+        option.series[getPieIndex()].data = data;  
+        myChart.setOption(option);  
+    }
+
+    var gSelectedLegendArray;
+    function getSelectedLegend(param){
+        //得到选择的序列
+        var legendSelected = param.selected;
+        gSelectedLegendArray  = new Array();
+        var selectedSeriesStep = 0;
+        for(var i=0;i<option.legend.data.length;i++)
+        {            
+            var label = option.legend.data[i];
+            if(legendSelected[label]){
+                legendIndex =  i;
+                
+                gSelectedLegendArray[selectedSeriesStep] = label;
+                selectedSeriesStep++;
+            }
+        }
+        return gSelectedLegendArray;
+    }
+
+    function refreshPieFromLegend(param){
+       getSelectedLegend(param);
+       var data =  getPieDataCore(param);   
+       option.series[getPieIndex()].data = data;  
+       myChart.setOption(option);       
+    }
+
+    function getSelectdMap(param){
+        //得到省市对应的大区
+        var len = mapType.length;
+        var mt ;
+        var selected = param.selected;
+        for (var i in selected) {
+            if (selected[i]) {
+                mt = i;            
+                break;
+            }
+        } 
+        gSelectedProvince = mt;
+        return mt;
+    }
+
+    function getPieDataCore(){
+        //为选择省市，直接返回
+        if(gSelectedProvince==undefined){return false;}
+        //默认选择是第一个
+        if(gSelectedLegendArray==undefined&&option.legend.data.length>0){
+            gSelectedLegendArray = new Array();
+            gSelectedLegendArray[0] = option.legend.data[0];
+        }
+        console.log(gSelectedProvince);
+        console.log(gSelectedLegendArray);
+        var detailData = [];
+        <#if areaProvinceData ??>        
+            detailData = ${areaProvinceData};
+        </#if>
+        var data  = [] ;
+        
+        var region = getRegionLabel(gSelectedProvince);
+        //每个序列扫描
+        console.log("gSelectedLegendArray.length--->"+gSelectedLegendArray.length);
+        for(var j=0;j<gSelectedLegendArray.length;j++){
+            //扫描原始数据
+            for(var i=0;i<detailData.length;i++){
+                var cityData = detailData[i];
+                //同一个大区下
+                if(region==getRegionLabel(cityData.name) && option.series[j].name==cityData.series){
+                    var found = false;
+                    //确认原来是否已有改城市数据
+                    for(var k=0;k<data.length;k++){
+                        var element = data[k];
+                        console.log("element:"+element.name);
+                        if (element.name == cityData.name){
+                            console.log("找到相等:"+element.name);
+                            element.value =  element.value + parseFloat(cityData.value);
+                            found = true;
+                        }
+                    }                     
+                    if(!found){
+                        var newElement  = new Object() ;
+                        newElement["name"]=cityData.name;
+                        newElement["value"]=parseFloat(cityData.value);
+                        data.push(newElement);
+                    }
+                }
+
+            }
+            console.log("data:"+data);
+        }
+        return data;
+    }
+    //大区混搭图js end
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	
 </script>
