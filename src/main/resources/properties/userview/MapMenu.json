@@ -423,7 +423,7 @@
 		        cols : '60',
 		        rows : '15',
 				required:'True',
-				value : 'select sum(quantity) as quantity,product as series from tableName group by product;'
+				value : 'select sum(quantity) as quantity,product as series from tableName where 1=1 group by product;'
 			},
 			{
 				name:'areaProvinceySql',
@@ -516,6 +516,25 @@
 		        type : 'textfield',
 		        required : 'false',
 		        value : 'http://map.baidu.com'
+		    },
+		    {
+		        name : 'openUrlType',
+		        label : '跳转方式',
+		        type : 'selectbox',
+		        required : 'false',
+		        value : 'false',
+		        options : [{
+		        	value : '_blank',
+		            label : '新建窗口'
+		        },
+		        {
+		            value : '_self',
+		            label : '自身'
+		        },
+		        {
+		            value : '_dialog',
+		            label : '对话框'
+		        }]
 		    },
 		    {
 		    	name : 'openUrlParamOfMap',

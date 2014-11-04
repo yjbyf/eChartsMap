@@ -17,6 +17,7 @@ import com.joget.valuprosys.echartsMap.utils.RegionUtils;
 
 public class EchartsMap extends UserviewMenu {
 
+	private static final String OPEN_URL_TYPE = "openUrlType";
 	private static final String AREA_PROVINCEY_SQL = "areaProvinceySql";
 	private static final String SHOW_SUB_DETAIL = "showSubDetail";
 	private static final String H_POS = "hPos";
@@ -67,7 +68,7 @@ public class EchartsMap extends UserviewMenu {
 				,"minValueColor","dataRangeMin","dataRangeMax",SHOW_PROVINCE,TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
 				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,
 				AREA_PROVINCEY_SQL,AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR,AREA_TABLE_SHOW,
-				OPEN_URL_FLAG,OPEN_URL,OPEN_URL_PARAM_OF_MAP,OPEN_URL_PARAM_VALUE,OPEN_URL_PARAM_VALUE,
+				OPEN_URL_FLAG,OPEN_URL,OPEN_URL_TYPE,OPEN_URL_PARAM_OF_MAP,OPEN_URL_PARAM_VALUE,OPEN_URL_PARAM_VALUE,
 				SHOW_SUB_DETAIL,IN_RADIUS,OUT_RADIUS,V_POS,H_POS);
 	
 	private static final String TEMPLATE_PATH = TEMPLATES_ECHARTS_MAP_FTL;

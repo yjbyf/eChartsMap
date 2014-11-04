@@ -152,7 +152,15 @@ var mapType = [
         }    	
 		var openUrl = "${openUrl}";
 		openUrl = openUrl.replace('%40LOCATION%40', mt);
-		window.open(openUrl);
+		var openUrlType ='${openUrlType}';
+		<#if openUrlType=='_blank'>
+			window.open(openUrl);
+		<#elseif openUrlType=='_self'>
+			document.location=openUrl;
+		<#elseif openUrlType=='_dialog'>	
+			var popupActionDialog = new PopupDialog(openUrl);
+	    	popupActionDialog.init();
+		</#if>
 		
 	});
 ///////////////////////////////////////////////////////地图缩放start
