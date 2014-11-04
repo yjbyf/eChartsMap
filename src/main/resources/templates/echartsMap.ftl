@@ -5,7 +5,12 @@
 </#if>
 <script src="${requestUrl}/echarts/esl.js"></script>	
 <!--todo no border-->
-<div id="mapDiv" class="mapDiv" style="height:${height}px;width:${width}px;border:0px;padding:10px;"></div>
+<div id="graphic" class="col-md-8">
+	<div>
+		<span id='returnSpan' style="color:#1e90ff"><a href="javascript:returnToCountry();" id="returnToParentMap" style="text-decoration:none;display:none">${returnToCountryHref}</a></span>
+	</div>
+	<div id="mapDiv" class="mapDiv" style="height:${height}px;width:${width}px;border:0px;padding:10px;"></div>
+</div> 
 <#if areaTableShow = 'true'>
 <div>            
 	<#if areaVar ??>
@@ -197,7 +202,8 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         for (var i in selected) {
             if (selected[i]) {
                 mt = i;
-                while (len--) {
+                refreshReturnParentHref(true);
+                while (len--) {                	
                     if (mapType[len] == mt) {
                         curIndx = len;
                     }
@@ -223,8 +229,9 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         //option.tooltip.formatter = '滚轮切换省份或点击返回全国<br/>{b}';
     }
     else {
-        curIndx = 0;
-        mt = 'china';
+        //curIndx = 0;
+        //mt = 'china';
+        return false;
         /*
         for(var i=0;i<option.series.length;i++){
             	option.series[i].markPoint.data = curCountryData[i];   
@@ -595,6 +602,26 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         return data;
     }
     //大区混搭图js end
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	//大区返回按钮相关script
+	function refreshReturnParentHref(show){
+	    if(show){
+	        $("#returnToParentMap").show();
+	    }else{
+	        $("#returnToParentMap").hide();
+	    }
+	}
+
+	function returnToCountry(){
+		curIndx=0;
+	    for (var i=0;i<option.series.length;i++){
+	        option.series[i].mapType = 'china';
+	    }	  
+	    myChart.setOption(option, true);
+	    refreshReturnParentHref(false);
+	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 	
 </script>

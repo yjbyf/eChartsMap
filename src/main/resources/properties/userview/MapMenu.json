@@ -129,7 +129,14 @@
 		            value : 'false',
 		            label : 'false'
 		        }]
-		    }
+		    },
+		    {
+				name:'returnToCountryHref',
+				label:'返回全国地图链接文字定义',
+				type:'textfield',
+				required:'True',				
+				value:'返回上级地图'
+			}
 		]
 	},
 	{
