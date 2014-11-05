@@ -617,7 +617,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
             for(var i=0;i<detailData.length;i++){
                 var cityData = detailData[i];
                 //同一个大区下
-                if(region==getRegionLabel(cityData.name) && option.series[j].name==cityData.series){
+                if(region==getRegionLabel(cityData.name) && gSelectedLegendArray[j]==cityData.series){
                     var found = false;
                     //确认原来是否已有改城市数据
                     for(var k=0;k<data.length;k++){
