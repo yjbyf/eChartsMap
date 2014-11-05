@@ -144,17 +144,9 @@ var mapType = [
 ];	
 ///////////////////////////////////////////////////////地图跳转优先级优于地图缩放优于地图缩放前面
 ///////////////////////////////////////////////////////地图跳转start
-<#if openUrlFlag = 'true' >
-	myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
-	    var len = mapType.length;
-		var mt ;
-        var selected = param.selected;
-        for (var i in selected) {
-            if (selected[i]) {
-                mt = i;            
-                break;
-            }
-        }    	
+<#if openUrl ??>
+	//页面跳转公用函数
+	function openURL(mt){
 		var openUrl = "${openUrl}";
 		openUrl = openUrl.replace('%40LOCATION%40', mt);
 		var openUrlType ='${openUrlType}';
@@ -166,7 +158,21 @@ var mapType = [
 			var popupActionDialog = new PopupDialog(openUrl);
 	    	popupActionDialog.init();
 		</#if>
-		
+	}
+</#if>
+<#if openUrlFlag = 'true' >
+   //全国地图模式下地图下转
+	myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
+	    var len = mapType.length;
+		var mt ;
+        var selected = param.selected;
+        for (var i in selected) {
+            if (selected[i]) {
+                mt = i;            
+                break;
+            }
+        }    	
+		openURL(mt);
 	});
 ///////////////////////////////////////////////////////地图缩放start
 <#elseif showProvince = 'true' >
@@ -196,9 +202,9 @@ var curCountryData;//= [];
 myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     var len = mapType.length;
     var mt = mapType[curIndx % len];
+    var selected = param.selected;
     if (mt == 'china') {
         // 全国选择时指定到选中的省份
-        var selected = param.selected;
         for (var i in selected) {
             if (selected[i]) {
                 mt = i;
@@ -229,6 +235,16 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         //option.tooltip.formatter = '滚轮切换省份或点击返回全国<br/>{b}';
     }
     else {
+    		//判定二级省市点击的时候地图是否需要跳转页面
+    		var openUrlProvinceFlag = ${openUrlProvinceFlag};
+    		if(openUrlProvinceFlag){
+    			for (var i in selected) {
+	            if (selected[i]) {
+	                mt = i;
+	             }
+             }   
+    			openURL(mt);
+    		}
         //curIndx = 0;
         //mt = 'china';
         return false;

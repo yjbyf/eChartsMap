@@ -176,15 +176,6 @@
 				validation_message:'非法输入'
 		    },
 		    {
-		        name : 'maxValueColor',
-		        label : '最大值的颜色标识',
-		        type:'textfield',
-				required:'Flase',
-				value : '#FF0000',
-				regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]$',
-				validation_message:'非法输入'
-		    },
-		    {
 		        name : 'dataRangeMin',
 		        label : '最小值',
 		        type:'textfield',
@@ -194,12 +185,11 @@
 				validation_message:'非法输入'
 		    },
 		    {
-		        name : 'minValueColor',
-		        label : '最小值的颜色标识',
+		        name : 'dataRangeColor',
+		        label : '颜色标识(多个颜色以逗号分割并且以单引号标注,如\'red\',\'yellow\')',
 		        type:'textfield',
 				required:'Flase',
-				value : '#FFFF00',
-				regex_validation:'^[#][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_][a-zA-Z0-9_]$',
+				value : '\'red\',\'yellow\'',
 				validation_message:'非法输入'
 		    }
 		]
@@ -504,7 +494,22 @@
 		properties:[
 			{
 		        name : 'openUrlFlag',
-		        label : '是否跳转地图(跳转地图优于省市显示)',
+		        label : '全国地图下是否跳转地图(跳转地图优于省市显示)',
+		        type : 'selectbox',
+		        required : 'false',
+		        value : 'false',
+		        options : [{
+		        	value : 'true',
+		            label : 'true'
+		        },
+		        {
+		            value : 'false',
+		            label : 'false'
+		        }]
+		    },
+		    {
+		        name : 'openUrlProvinceFlag',
+		        label : '省市地图下是否跳转地图',
 		        type : 'selectbox',
 		        required : 'false',
 		        value : 'false',

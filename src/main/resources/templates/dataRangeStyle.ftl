@@ -17,7 +17,7 @@
     {
     	splitNumber: ${splitNumber},
         orient: 'vertical', // 'horizontal'       
-        color:['${maxValueColor}','${minValueColor}'],
+        color:[${dataRangeColor}],
         <#if splitNumber = "0">
         text:['高','低'],
         </#if>

@@ -17,6 +17,8 @@ import com.joget.valuprosys.echartsMap.utils.RegionUtils;
 
 public class EchartsMap extends UserviewMenu {
 
+	private static final String OPEN_URL_PROVINCE_FLAG = "openUrlProvinceFlag";
+	private static final String DATA_RANGE_COLOR = "dataRangeColor";
 	private static final String RETURN_TO_COUNTRY_HREF = "returnToCountryHref";
 	private static final String OPEN_URL_TYPE = "openUrlType";
 	private static final String AREA_PROVINCEY_SQL = "areaProvinceySql";
@@ -65,12 +67,12 @@ public class EchartsMap extends UserviewMenu {
 	private static final String TEMPLATES_ECHARTS_MAP_FTL = "/templates/echartsMap.ftl";
 	private static final String ICON = "/plugin/org.joget.apps.userview.lib.HtmlPage/images/grid_icon.gif";
 	private static final List<String> PARAM = Arrays.asList("devMode","width", "height",BACK_GROUND_COLOR,FONT_COLOR, "mapLabel","mapSubLabel",
-				SHOW_DATA_RANGE,SHOW_LEGEND,SHOW_TOOL_BOX,"theme","splitNumber","maxValueColor"
-				,"minValueColor","dataRangeMin","dataRangeMax",SHOW_PROVINCE,RETURN_TO_COUNTRY_HREF,
+				SHOW_DATA_RANGE,SHOW_LEGEND,SHOW_TOOL_BOX,"theme","splitNumber",
+				DATA_RANGE_COLOR,"dataRangeMin","dataRangeMax",SHOW_PROVINCE,RETURN_TO_COUNTRY_HREF,
 				TOOLTIP_SHOW_DETAIL,MARK_POINT_SHOW_OR_NOT,MARK_POINT_COLOR,
 				"MultiShowSeries",SERIES_COLUMN_NAME,CITY_COLUMN_NAME,QUANTITY_COLUMN_NAME,SQL,
 				AREA_PROVINCEY_SQL,AREA_SQL,AREA_CITY_COLUMN_NAME,AREA_SERIES_COLUMN_NAME,AREA_QUANTITY_COLUMN_NAME,AREA_SHOW,AREA_NAME,AREA_LOCATIONS,AREA_COLOR,AREA_TABLE_SHOW,
-				OPEN_URL_FLAG,OPEN_URL,OPEN_URL_TYPE,OPEN_URL_PARAM_OF_MAP,OPEN_URL_PARAM_VALUE,OPEN_URL_PARAM_VALUE,
+				OPEN_URL_FLAG,OPEN_URL_PROVINCE_FLAG,OPEN_URL,OPEN_URL_TYPE,OPEN_URL_PARAM_OF_MAP,OPEN_URL_PARAM_VALUE,OPEN_URL_PARAM_VALUE,
 				SHOW_SUB_DETAIL,IN_RADIUS,OUT_RADIUS,V_POS,H_POS);
 	
 	private static final String TEMPLATE_PATH = TEMPLATES_ECHARTS_MAP_FTL;
