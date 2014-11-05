@@ -145,10 +145,24 @@ var mapType = [
 ///////////////////////////////////////////////////////地图跳转优先级优于地图缩放优于地图缩放前面
 ///////////////////////////////////////////////////////地图跳转start
 <#if openUrl ??>
+	function endwith(wholeStr,str){     
+	  var reg=new RegExp(str+"$");     
+	  return reg.test(wholeStr);        
+	}
 	//页面跳转公用函数
 	function openURL(mt){
 		var openUrl = "${openUrl}";
 		openUrl = openUrl.replace('%40LOCATION%40', mt);
+		//得到选择的序列
+		var seriesValue ="";
+		getDefaultLegend();
+		 for(var i=0;i<gSelectedLegendArray.length;i++){
+		 	seriesValue = seriesValue + gSelectedLegendArray[i] + ",";
+		 }
+		 if(endwith(seriesValue,",")){
+		 	seriesValue = seriesValue.substring(0,seriesValue.length-1);
+		 }
+		openUrl = openUrl.replace('%40SERIES%40', seriesValue);
 		var openUrlType ='${openUrlType}';
 		<#if openUrlType=='_blank'>
 			window.open(openUrl);
@@ -176,6 +190,7 @@ var mapType = [
 	});
 ///////////////////////////////////////////////////////地图缩放start
 <#elseif showProvince = 'true' >
+myChart.on(echarts.config.EVENT.LEGEND_SELECTED,storeSelected);//用于省级页面跳转
 document.getElementById(mapDivName).onmousewheel = function (e){
     var event = e || window.event;
     curIndx += zrEvent.getDelta(event) > 0 ? (-1) : 1;
@@ -288,6 +303,8 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
 	myChart.on(ecConfig.EVENT.MAP_SELECTED,refreshPie);
 	myChart.on(echarts.config.EVENT.LEGEND_SELECTED,refreshPieFromLegend);
 ///////////////////////////////////////////////////////混搭地图end
+<#else>
+   
 </#if>
 
     var option = {
@@ -546,6 +563,10 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         return gSelectedLegendArray;
     }
 
+	function storeSelected(param){
+		getSelectedLegend(param);
+	}
+	
     function refreshPieFromLegend(param){
        getSelectedLegend(param);
        var data =  getPieDataCore(param);   
@@ -568,14 +589,18 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
         return mt;
     }
 
+   function getDefaultLegend(){
+   		 if(gSelectedLegendArray==undefined&&option.legend.data.length>0){
+            gSelectedLegendArray = new Array();
+            gSelectedLegendArray[0] = option.legend.data[0];
+        }
+   }
     function getPieDataCore(){
         //为选择省市，直接返回
         if(gSelectedProvince==undefined){return false;}
         //默认选择是第一个
-        if(gSelectedLegendArray==undefined&&option.legend.data.length>0){
-            gSelectedLegendArray = new Array();
-            gSelectedLegendArray[0] = option.legend.data[0];
-        }
+       getDefaultLegend();
+       
         console.log(gSelectedProvince);
         console.log(gSelectedLegendArray);
         var detailData = [];

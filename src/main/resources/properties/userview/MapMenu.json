@@ -553,6 +553,13 @@
 		        label : '地名参数名',
 		        type : 'textfield',
 		        required : 'false',
+		        value : 'series'
+		    },
+		    {
+		    	name : 'openUrlParamOfSeries',
+		        label : '序列参数名',
+		        type : 'textfield',
+		        required : 'false',
 		        value : 'location'
 		    },
 		    {
