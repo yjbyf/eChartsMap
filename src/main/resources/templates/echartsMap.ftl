@@ -156,12 +156,14 @@ var mapType = [
 		//得到选择的序列
 		var seriesValue ="";
 		getDefaultLegend();
+		if(gSelectedLegendArray!=null){
 		 for(var i=0;i<gSelectedLegendArray.length;i++){
 		 	seriesValue = seriesValue + gSelectedLegendArray[i] + ",";
 		 }
 		 if(endwith(seriesValue,",")){
 		 	seriesValue = seriesValue.substring(0,seriesValue.length-1);
 		 }
+		} 
 		openUrl = openUrl.replace('%40SERIES%40', seriesValue);
 		var openUrlType ='${openUrlType}';
 		<#if openUrlType=='_blank'>
@@ -590,7 +592,7 @@ myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
     }
 
    function getDefaultLegend(){
-   		 if(gSelectedLegendArray==undefined&&option.legend.data.length>0){
+   		 if(gSelectedLegendArray==undefined&&option.legend!=null&&option.legend.data!=null&&option.legend.data.length>0){
             gSelectedLegendArray = new Array();
             gSelectedLegendArray[0] = option.legend.data[0];
         }

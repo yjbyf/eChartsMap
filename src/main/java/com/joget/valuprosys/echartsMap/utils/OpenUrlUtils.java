@@ -9,8 +9,10 @@ public class OpenUrlUtils {
 		String[] params = paramNames.split(RegionUtils.SPLIT);
 		String[] values = paramValues.split(RegionUtils.SPLIT);
 		for (int i = 0; i < params.length; i++) {
-			fullUrl = fullUrl + "&" + encode(params[i]) + "="
+			if(params[i]!=null&&params[i].length()>0){
+				fullUrl = fullUrl + "&" + encode(params[i]) + "="
 					+ encode(values[i]);
+			}
 		}
 		return fullUrl;
 	}
