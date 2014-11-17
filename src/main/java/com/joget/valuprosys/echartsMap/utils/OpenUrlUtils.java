@@ -1,10 +1,11 @@
 package com.joget.valuprosys.echartsMap.utils;
 
 public class OpenUrlUtils {
-	public static String getFullUrl(String url, String locationParam,String seriesParam,
-			String locationValue, String seriesValue,String paramNames, String paramValues) {
+	public static String getFullUrl(String url, String locationParam,String locationParentParam,String seriesParam,
+			String locationValue, String locationParentValue,String seriesValue,String paramNames, String paramValues) {
 		String fullUrl = url;
 		fullUrl = fullUrl + "?" + locationParam + "=" + encode(locationValue);
+		fullUrl = fullUrl + "&" + locationParentParam + "=" + encode(locationParentValue);
 		fullUrl = fullUrl + "&" + seriesParam + "=" + encode(seriesValue);
 		String[] params = paramNames.split(RegionUtils.SPLIT);
 		String[] values = paramValues.split(RegionUtils.SPLIT);

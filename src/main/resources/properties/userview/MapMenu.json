@@ -553,14 +553,21 @@
 		        label : '地名参数名',
 		        type : 'textfield',
 		        required : 'false',
-		        value : 'series'
+		        value : 'location'
+		    },
+		    {
+		    	name : 'openUrlParamOfParentMap',
+		        label : '父级地名参数名',
+		        type : 'textfield',
+		        required : 'false',
+		        value : 'parentLocation'
 		    },
 		    {
 		    	name : 'openUrlParamOfSeries',
 		        label : '序列参数名',
 		        type : 'textfield',
 		        required : 'false',
-		        value : 'location'
+		        value : 'series'
 		    },
 		    {
 		        name : 'openUrlParams',

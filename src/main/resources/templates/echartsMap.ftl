@@ -152,7 +152,12 @@ var mapType = [
 	//页面跳转公用函数
 	function openURL(mt){
 		var openUrl = "${openUrl}";
+		
 		openUrl = openUrl.replace('%40LOCATION%40', mt);
+		if(option.series!=null&&option.series[0]!=null&&option.series[0].mapType!=null){
+		 	 var parentMT  = option.series[0].mapType;
+		  	 openUrl = openUrl.replace('%40PARENTLOCATION%40', parentMT);
+		}
 		//得到选择的序列
 		var seriesValue ="";
 		getDefaultLegend();
